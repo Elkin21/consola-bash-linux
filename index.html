@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Plataforma Interactiva Linux y Bash</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<link rel="stylesheet" href="estilos.css">
+
+</head>
+
+<body>
+
+<div id="particulas"></div>
+
+<header>
+
+<div class="logo">
+
+<i class="fab fa-linux"></i>
+
+<h1>Linux & Bash</h1>
+
+</div>
+
+<nav>
+
+<a href="#inicio">Inicio</a>
+
+<a href="#unidad1">Unidad 1</a>
+
+<a href="#unidad2">Unidad 2</a>
+
+<a href="#unidad3">Unidad 3</a>
+
+<a href="#unidad4">Unidad 4</a>
+
+<a href="#juegos">Juegos</a>
+
+<a href="#quiz">Quiz</a>
+
+<a href="#terminal">Terminal</a>
+
+</nav>
+
+</header>
+
+<section id="inicio" class="banner">
+
+<div class="contenido">
+
+<h2>Curso Interactivo de Linux y Bash</h2>
+
+<p>
+
+Aprende Linux de una forma diferente mediante imágenes, videos,
+
+simuladores, juegos, ejercicios y una terminal interactiva.
+
+</p>
+
+<button onclick="irUnidad()">Comenzar</button>
+
+</div>
+
+<div class="imagen">
+
+<img src="img/linux.png">
+
+</div>
+
+</section>
+
+<section class="barra">
+
+<div id="progreso"></div>
+
+</section>
+
+<section id="unidad1">
+
+<h2>
+
+<i class="fab fa-linux"></i>
+
+Unidad 1
+
+</h2>
+
+<h3>Introducción a Linux y la Consola Bash</h3>
+
+<p>
+
+En esta unidad conocerás los fundamentos de Linux, su historia,
+
+las distribuciones, la terminal y el funcionamiento de Bash.
+
+</p>
+
+<div class="grid">
+
+<div class="card">
+
+<h3>Historia de Linux</h3>
+
+<img src="img/historia.jpg">
+
+<p>
+
+Linux nació en 1991 gracias a Linus Torvalds y actualmente
+
+es uno de los sistemas operativos más utilizados en servidores,
+
+supercomputadoras y dispositivos móviles.
+
+</p>
+
+<iframe
+
+src="https://www.youtube.com/embed/ShcR4Zfc6Dw"
+
+allowfullscreen>
+
+</iframe>
+
+<button onclick="mostrarCuriosidad(1)">
+
+Curiosidad
+
+</button>
+
+<div id="c1" class="oculto">
+
+Linux es software libre y cualquier persona puede modificar
+
+su código fuente.
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h3>¿Qué es un Sistema Operativo?</h3>
+
+<img src="img/so.jpg">
+
+<p>
+
+Es el software encargado de administrar el hardware y permitir
+
+la ejecución de programas.
+
+</p>
+
+<iframe
+
+src="https://www.youtube.com/embed/26QPDBe-NB8"
+
+allowfullscreen>
+
+</iframe>
+
+<button onclick="mostrarCuriosidad(2)">
+
+Más información
+
+</button>
+
+<div id="c2" class="oculto">
+
+Windows, Linux y macOS son sistemas operativos.
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h3>Características de Linux</h3>
+
+<img src="img/caracteristicas.jpg">
+
+<ul>
+
+<li>Libre</li>
+
+<li>Seguro</li>
+
+<li>Multitarea</li>
+
+<li>Multiusuario</li>
+
+<li>Estable</li>
+
+<li>Personalizable</li>
+
+</ul>
+
+<iframe
+
+src="https://www.youtube.com/embed/wBp0Rb-ZJak"
+
+allowfullscreen>
+
+</iframe>
+
+</div>
+
+<div class="card">
+
+<h3>Distribuciones Linux</h3>
+
+<img src="img/distros.png">
+
+<p>
+
+Ubuntu
+
+Debian
+
+Fedora
+
+Arch Linux
+
+Kali Linux
+
+Linux Mint
+
+</p>
+
+<button onclick="juegoDistribuciones()">
+
+Jugar
+
+</button>
+
+</div>
+
+<div class="card">
+
+<h3>Terminal Linux</h3>
+
+<img src="img/terminal.jpg">
+
+<p>
+
+La terminal permite controlar completamente el sistema
+
+mediante comandos.
+
+</p>
+
+<iframe
+
+src="https://www.youtube.com/embed/cBokz0LTizk"
+
+allowfullscreen>
+
+</iframe>
+
+</div>
+
+<div class="card">
+
+<h3>¿Qué es Bash?</h3>
+
+<img src="img/bash.png">
+
+<p>
+
+Bash significa Bourne Again Shell y es el intérprete
+
+de comandos utilizado en la mayoría de distribuciones Linux.
+
+</p>
+
+<iframe
+
+src="https://www.youtube.com/embed/ZtqBQ68cfJc"
+
+allowfullscreen>
+
+</iframe>
+
+</div>
+
+<div class="card">
+
+<h3>GUI vs CLI</h3>
+
+<img src="img/gui-cli.png">
+
+<table>
+
+<tr>
+
+<th>GUI</th>
+
+<th>CLI</th>
+
+</tr>
+
+<tr>
+
+<td>Interfaz gráfica</td>
+
+<td>Línea de comandos</td>
+
+</tr>
+
+<tr>
+
+<td>Uso con mouse</td>
+
+<td>Uso con teclado</td>
+
+</tr>
+
+<tr>
+
+<td>Más sencilla</td>
+
+<td>Más potente</td>
+
+</tr>
+
+</table>
+
+</div>
+
+<div class="card">
+
+<h3>Ventajas de la Terminal</h3>
+
+<ul>
+
+<li>Mayor velocidad</li>
+
+<li>Automatización</li>
+
+<li>Control total</li>
+
+<li>Administración remota</li>
+
+<li>Consumo reducido de recursos</li>
+
+</ul>
+
+</div>
+
+<div class="card">
+
+<h3>Sistema de Archivos</h3>
+
+<img src="img/directorios.png">
+
+<p>
+
+Linux organiza la información mediante directorios como:
+
+</p>
+
+<ul>
+
+<li>/home</li>
+
+<li>/etc</li>
+
+<li>/bin</li>
+
+<li>/root</li>
+
+<li>/usr</li>
+
+<li>/var</li>
+
+</ul>
+
+</div>
+
+<div class="card">
+
+<h3>Navegación</h3>
+
+<img src="img/carpetas.png">
+
+<p>
+
+Aprenderás a desplazarte utilizando comandos como:
+
+</p>
+
+<ul>
+
+<li>pwd</li>
+
+<li>cd</li>
+
+<li>ls</li>
+
+</ul>
+
+</div>
+
+<div class="card">
+
+<h3>Usuarios y Permisos</h3>
+
+<img src="img/permisos.png">
+
+<p>
+
+Linux utiliza permisos para proteger archivos y directorios.
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ===================== UNIDAD 2 ===================== -->
+
+<section id="unidad2">
+
+<h2><i class="fas fa-terminal"></i> Unidad 2</h2>
+
+<h3>Comandos Básicos de Bash</h3>
+
+<p>Aprende los principales comandos utilizados diariamente en Linux.</p>
+
+<div class="grid">
+
+<div class="card">
+<h3>pwd</h3>
+<img src="img/pwd.png">
+<p>Muestra la ruta del directorio actual.</p>
+<code>pwd</code>
+<iframe src="https://www.youtube.com/embed/0jJ5R8nP8kY" allowfullscreen></iframe>
+</div>
+
+<div class="card">
+<h3>ls</h3>
+<img src="img/ls.png">
+<p>Lista el contenido de una carpeta.</p>
+<code>ls</code>
+</div>
+
+<div class="card">
+<h3>cd</h3>
+<img src="img/cd.png">
+<p>Cambia de directorio.</p>
+<code>cd Documentos</code>
+</div>
+
+<div class="card">
+<h3>mkdir</h3>
+<img src="img/mkdir.png">
+<p>Crea una carpeta nueva.</p>
+<code>mkdir Proyecto</code>
+</div>
+
+<div class="card">
+<h3>touch</h3>
+<img src="img/touch.png">
+<p>Crea un archivo vacío.</p>
+<code>touch archivo.txt</code>
+</div>
+
+<div class="card">
+<h3>cp</h3>
+<img src="img/cp.png">
+<p>Copia archivos o carpetas.</p>
+<code>cp origen destino</code>
+</div>
+
+<div class="card">
+<h3>mv</h3>
+<img src="img/mv.png">
+<p>Mueve o renombra archivos.</p>
+<code>mv archivo.txt carpeta/</code>
+</div>
+
+<div class="card">
+<h3>rm</h3>
+<img src="img/rm.png">
+<p>Elimina archivos.</p>
+<code>rm archivo.txt</code>
+</div>
+
+<div class="card">
+<h3>cat</h3>
+<img src="img/cat.png">
+<p>Muestra el contenido de un archivo.</p>
+<code>cat archivo.txt</code>
+</div>
+
+<div class="card">
+<h3>grep</h3>
+<img src="img/grep.png">
+<p>Busca texto dentro de archivos.</p>
+<code>grep "Linux" notas.txt</code>
+</div>
+
+<div class="card">
+<h3>find</h3>
+<img src="img/find.png">
+<p>Busca archivos y carpetas.</p>
+<code>find /home -name archivo.txt</code>
+</div>
+
+<div class="card">
+<h3>history</h3>
+<img src="img/history.png">
+<p>Muestra el historial de comandos.</p>
+<code>history</code>
+</div>
+
+</div>
+
+</section>
+
+<!-- ===================== UNIDAD 3 ===================== -->
+
+<section id="unidad3">
+
+<h2><i class="fas fa-user-shield"></i> Unidad 3</h2>
+
+<h3>Administración del Sistema</h3>
+
+<div class="grid">
+
+<div class="card">
+<h3>Usuarios</h3>
+<img src="img/usuarios.png">
+<p>Linux permite crear múltiples usuarios con diferentes privilegios.</p>
+</div>
+
+<div class="card">
+<h3>Grupos</h3>
+<img src="img/grupos.png">
+<p>Los grupos facilitan la administración de permisos.</p>
+</div>
+
+<div class="card">
+<h3>chmod</h3>
+<img src="img/chmod.png">
+<p>Modifica permisos de archivos.</p>
+<code>chmod 755 archivo.sh</code>
+</div>
+
+<div class="card">
+<h3>chown</h3>
+<img src="img/chown.png">
+<p>Cambia el propietario de un archivo.</p>
+<code>chown usuario archivo</code>
+</div>
+
+<div class="card">
+<h3>uname</h3>
+<img src="img/uname.png">
+<p>Muestra información del sistema operativo.</p>
+</div>
+
+<div class="card">
+<h3>hostname</h3>
+<img src="img/hostname.png">
+<p>Muestra el nombre del equipo.</p>
+</div>
+
+<div class="card">
+<h3>whoami</h3>
+<img src="img/whoami.png">
+<p>Indica el usuario actual.</p>
+</div>
+
+<div class="card">
+<h3>df</h3>
+<img src="img/disco.png">
+<p>Consulta el espacio libre en disco.</p>
+</div>
+
+<div class="card">
+<h3>du</h3>
+<img src="img/du.png">
+<p>Calcula el tamaño de carpetas.</p>
+</div>
+
+<div class="card">
+<h3>ps</h3>
+<img src="img/ps.png">
+<p>Lista procesos en ejecución.</p>
+</div>
+
+<div class="card">
+<h3>top</h3>
+<img src="img/top.png">
+<p>Monitor del sistema en tiempo real.</p>
+</div>
+
+<div class="card">
+<h3>kill</h3>
+<img src="img/kill.png">
+<p>Finaliza procesos.</p>
+</div>
+
+<div class="card">
+<h3>Variables de Entorno</h3>
+<img src="img/env.png">
+<p>Permiten almacenar información utilizada por el sistema.</p>
+</div>
+
+<div class="card">
+<h3>Redirección</h3>
+<img src="img/redireccion.png">
+<p>Utiliza los operadores > >> y < para guardar información.</p>
+</div>
+
+<div class="card">
+<h3>Gestión de Paquetes</h3>
+<img src="img/package.png">
+<p>Instalación y actualización de programas mediante gestores de paquetes.</p>
+</div>
+
+</div>
+
+</section>
+
+<!-- ===================== UNIDAD 4 ===================== -->
+
+<section id="unidad4">
+
+<h2><i class="fas fa-code"></i> Unidad 4</h2>
+
+<h3>Automatización y Scripts Bash</h3>
+
+<div class="grid">
+
+<div class="card">
+<h3>¿Qué es un Script?</h3>
+
+<img src="img/script.png">
+
+<p>
+
+Un script Bash es un archivo que contiene una serie de comandos
+que pueden ejecutarse automáticamente.
+
+</p>
+
+<iframe src="https://www.youtube.com/embed/SPwyp2NG-bE" allowfullscreen></iframe>
+
+</div>
+
+<div class="card">
+
+<h3>Estructura de un Script</h3>
+
+<pre>
+
+#!/bin/bash
+
+echo "Hola Mundo"
+
+</pre>
+
+</div>
+
+<div class="card">
+
+<h3>Variables</h3>
+
+<pre>
+
+nombre="Mateo"
+
+echo $nombre
+
+</pre>
+
+</div>
+
+<div class="card">
+
+<h3>Condicional IF</h3>
+
+<pre>
+
+if [ $edad -ge 18 ]
+
+then
+
+echo Adulto
+
+fi
+
+</pre>
+
+</div>
+
+<div class="card">
+
+<h3>Bucle FOR</h3>
+
+<pre>
+
+for i in 1 2 3
+
+do
+
+echo $i
+
+done
+
+</pre>
+
+</div>
+
+<div class="card">
+
+<h3>Funciones</h3>
+
+<pre>
+
+saludar(){
+
+echo Hola
+
+}
+
+</pre>
+
+</div>
+
+<div class="card">
+
+<h3>Cron</h3>
+
+<p>
+
+Cron permite programar tareas automáticas.
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!--================== JUEGOS ==================-->
+
+<section id="juegos">
+
+<h2><i class="fas fa-gamepad"></i> Juegos Interactivos</h2>
+
+<p>
+Aprende Linux jugando.
+</p>
+
+<div class="grid">
+
+<div class="card">
+
+<h3>Memorama Linux</h3>
+
+<img src="img/memoria.png">
+
+<p>
+Encuentra la pareja entre comando y función.
+</p>
+
+<button onclick="memorama()">
+
+Jugar
+
+</button>
+
+</div>
+
+<div class="card">
+
+<h3>Ruleta Bash</h3>
+
+<img src="img/ruleta.png">
+
+<p>
+La ruleta escogerá un comando aleatorio.
+</p>
+
+<button onclick="ruleta()">
+
+Girar
+
+</button>
+
+</div>
+
+<div class="card">
+
+<h3>Ahorcado</h3>
+
+<img src="img/ahorcado.png">
+
+<p>
+Adivina el comando oculto.
+</p>
+
+<button onclick="ahorcado()">
+
+Comenzar
+
+</button>
+
+</div>
+
+<div class="card">
+
+<h3>Arrastrar y Soltar</h3>
+
+<img src="img/dragdrop.png">
+
+<p>
+Relaciona cada comando con su función.
+</p>
+
+<button onclick="dragdrop()">
+
+Iniciar
+
+</button>
+
+</div>
+
+<div class="card">
+
+<h3>Puzzle Linux</h3>
+
+<img src="img/puzzle.png">
+
+<p>
+Arma el logo de Linux.
+</p>
+
+<button onclick="puzzle()">
+
+Jugar
+
+</button>
+
+</div>
+
+<div class="card">
+
+<h3>Flash Cards</h3>
+
+<img src="img/cards.png">
+
+<p>
+
+Repasa todos los comandos mediante tarjetas.
+
+</p>
+
+<button onclick="flashcards()">
+
+Abrir
+
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+<!--================ TERMINAL =================-->
+
+<section id="terminal">
+
+<h2>
+
+<i class="fas fa-terminal"></i>
+
+Terminal Linux
+
+</h2>
+
+<p>
+
+Escribe un comando Bash.
+
+</p>
+
+<div class="terminal">
+
+<div class="pantalla" id="pantalla">
+
+Bienvenido a Bash
+
+</div>
+
+<input
+
+type="text"
+
+id="comando"
+
+placeholder="Escribe un comando">
+
+<button onclick="ejecutar()">
+
+Ejecutar
+
+</button>
+
+</div>
+
+</section>
+
+<!--================ QUIZ =================-->
+
+<section id="quiz">
+
+<h2>
+
+<i class="fas fa-question-circle"></i>
+
+Quiz Final
+
+</h2>
+
+<div class="quiz">
+
+<div id="pregunta">
+
+¿Cuál comando muestra el directorio actual?
+
+</div>
+
+<button onclick="respuesta('pwd')">
+
+pwd
+
+</button>
+
+<button onclick="respuesta('mkdir')">
+
+mkdir
+
+</button>
+
+<button onclick="respuesta('cp')">
+
+cp
+
+</button>
+
+<button onclick="respuesta('kill')">
+
+kill
+
+</button>
+
+<h3>
+
+Puntaje
+
+</h3>
+
+<h1 id="puntos">
+
+0
+
+</h1>
+
+</div>
+
+</section>
+
+<!--================ CERTIFICADO =================-->
+
+<section id="certificado">
+
+<h2>
+
+🏆 Certificado
+
+</h2>
+
+<p>
+
+Cuando completes todas las actividades podrás obtener tu certificado.
+
+</p>
+
+<div class="certificado">
+
+<h1>
+
+CERTIFICADO DE FINALIZACIÓN
+
+</h1>
+
+<h2>
+
+Curso Linux y Bash
+
+</h2>
+
+<p>
+
+Otorgado a
+
+</p>
+
+<input
+
+type="text"
+
+placeholder="Escribe tu nombre"
+
+id="nombreAlumno">
+
+<button onclick="certificado()">
+
+Generar
+
+</button>
+
+<div id="resultado">
+
+</div>
+
+</div>
+
+</section>
+
+<!--================ GALERÍA =================-->
+
+<section id="galeria">
+
+<h2>
+
+Galería Linux
+
+</h2>
+
+<div class="galeria">
+
+<img src="img/linux1.jpg">
+
+<img src="img/linux2.jpg">
+
+<img src="img/linux3.jpg">
+
+<img src="img/linux4.jpg">
+
+<img src="img/linux5.jpg">
+
+<img src="img/linux6.jpg">
+
+</div>
+
+</section>
+
+<!--================ CURIOSIDADES =================-->
+
+<section>
+
+<h2>
+
+¿Sabías que...?
+
+</h2>
+
+<div class="grid">
+
+<div class="card">
+
+🐧 Linux domina más del 90% de los servidores del mundo.
+
+</div>
+
+<div class="card">
+
+📱 Android utiliza el Kernel Linux.
+
+</div>
+
+<div class="card">
+
+🚀 La NASA utiliza Linux.
+
+</div>
+
+<div class="card">
+
+🌍 Google funciona sobre miles de servidores Linux.
+
+</div>
+
+<div class="card">
+
+💻 GitHub utiliza Linux en gran parte de su infraestructura.
+
+</div>
+
+<div class="card">
+
+🖥 Las supercomputadoras utilizan Linux.
+
+</div>
+
+</div>
+
+</section>
+
+<!--================ PROGRESO =================-->
+
+<section>
+
+<h2>
+
+Mi progreso
+
+</h2>
+
+<div class="progress">
+
+<div id="barra">
+
+0%
+
+</div>
+
+</div>
+
+</section>
+
+<footer>
+
+<div class="footer">
+
+<h2>
+
+Linux & Bash
+
+</h2>
+
+<p>
+
+Plataforma educativa interactiva.
+
+</p>
+
+<p>
+
+Universidad Central del Ecuador
+
+</p>
+
+<p>
+
+Pedagogía de Informática
+
+</p>
+
+<div class="redes">
+
+<i class="fab fa-github"></i>
+
+<i class="fab fa-youtube"></i>
+
+<i class="fab fa-linux"></i>
+
+<i class="fab fa-html5"></i>
+
+<i class="fab fa-css3"></i>
+
+<i class="fab fa-js"></i>
+
+</div>
+
+<p>
+
+© 2026 Todos los derechos reservados
+
+</p>
+
+</div>
+
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+
+</html>
+
+<script src="script.js"></script>
+
+</body>
+
+</html>
