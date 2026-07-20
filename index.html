@@ -354,10 +354,11 @@ footer{background:var(--bg-panel);border-top:1px solid var(--border);padding:3re
 
 /* ============ IMPRESIÓN: solo el certificado ============ */
 @media print{
-  body *{visibility:hidden;}
-  #certificado, #certificado *{visibility:visible;}
-  #certificado{position:absolute;top:0;left:0;width:100%;margin:0;padding:0;}
-  .section-head, .cert-controles{display:none !important;}
+  @page{margin:0;}
+  html, body{height:auto;margin:0;padding:0;background:#fff;}
+  body > *:not(#certificado){display:none !important;}
+  #certificado{display:block !important;padding:0;margin:0;}
+  #certificado .section-head, #certificado .cert-controles{display:none !important;}
   .certificado-marco{box-shadow:none;margin:0 auto;}
 }
 </style>
