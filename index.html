@@ -351,6 +351,15 @@ footer{background:var(--bg-panel);border-top:1px solid var(--border);padding:3re
   .dnd-wrap{grid-template-columns:1fr;}
   .quiz-opciones{grid-template-columns:1fr;}
 }
+
+/* ============ IMPRESIÓN: solo el certificado ============ */
+@media print{
+  body *{visibility:hidden;}
+  #certificado, #certificado *{visibility:visible;}
+  #certificado{position:absolute;top:0;left:0;width:100%;margin:0;padding:0;}
+  .section-head, .cert-controles{display:none !important;}
+  .certificado-marco{box-shadow:none;margin:0 auto;}
+}
 </style>
 </head>
 <body>
@@ -572,9 +581,7 @@ footer{background:var(--bg-panel);border-top:1px solid var(--border);padding:3re
       <p class="cert-desc">En reconocimiento por su dedicación y compromiso al completar el curso interactivo <strong>Linux &amp; Bash</strong>, demostrando conocimientos en administración de sistemas, comandos de terminal y automatización mediante scripts.</p>
       <div class="cert-fecha" id="certFecha"></div>
       <div class="cert-firmas">
-        <div class="firma-col"><span class="firma-linea"></span><span>Instructor(a)</span></div>
         <div class="sello-dorado"></div>
-        <div class="firma-col"><span class="firma-linea"></span><span>Coordinación Académica</span></div>
       </div>
     </div>
   </div>
