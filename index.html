@@ -15,7 +15,1464 @@
   --bg-panel-2:#2b1330;
   --aubergine:#3a1740;
   --orange:#E95420;
+  --orange-dim:#b8431a;<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Linux & Bash · Plataforma Interactiva</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<style>
+
+:root{
+  --bg:#170a18;
+  --bg-panel:#220f24;
+  --bg-panel-2:#2b1330;
+  --aubergine:#3a1740;
+  --orange:#E95420;
   --orange-dim:#b8431a;
+  --green:#3EB489;
+  --text:#f3ece8;
+  --text-dim:#c3aec6;
+  --text-faint:#8a7590;
+  --code-bg:#100810;
+  --border:#432248;
+  --radius:14px;
+  --display:'Space Grotesk',sans-serif;
+  --body:'Inter',sans-serif;
+  --mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--body);
+  line-height:1.6;
+  overflow-x:hidden;
+}
+::selection{background:var(--orange);color:#fff;}
+a{color:inherit;text-decoration:none;}
+button{
+  font-family:var(--body);
+  cursor:pointer;
+  border:none;
+  border-radius:999px;
+  padding:.7rem 1.6rem;
+  background:var(--orange);
+  color:#fff;
+  font-weight:600;
+  font-size:.95rem;
+  transition:transform .15s ease, background .15s ease, box-shadow .15s ease;
+}
+button:hover{background:var(--orange-dim);transform:translateY(-2px);box-shadow:0 6px 18px rgba(233,84,32,.35);}
+button:active{transform:translateY(0);}
+button.ghost{background:transparent;border:1px solid var(--border);color:var(--text);}
+button.ghost:hover{background:var(--bg-panel-2);}
+h1,h2,h3{font-family:var(--display);}
+code, .mono{font-family:var(--mono);}
+::-webkit-scrollbar{width:10px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--aubergine);border-radius:10px;}
+
+#particulas{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.particula{position:absolute;bottom:-10px;width:3px;height:3px;background:var(--green);border-radius:50%;opacity:.5;animation:subir linear infinite;}
+@keyframes subir{to{transform:translateY(-110vh);opacity:0;}}
+
+/* ============ HEADER ============ */
+header{
+  position:sticky;top:0;z-index:50;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1rem 2rem;
+  background:rgba(23,10,24,.85);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);
+}
+.logo{display:flex;align-items:center;gap:.6rem;}
+.logo i{color:var(--orange);font-size:1.5rem;}
+.logo h1{font-size:1.2rem;letter-spacing:.02em;}
+nav{display:flex;gap:1.4rem;flex-wrap:wrap;}
+nav a{font-size:.88rem;color:var(--text-dim);font-weight:500;position:relative;padding:.2rem 0;cursor:pointer;}
+nav a:hover{color:var(--text);}
+nav a::after{content:'';position:absolute;left:0;bottom:-3px;width:0;height:2px;background:var(--orange);transition:width .2s;}
+nav a:hover::after{width:100%;}
+#hamb{display:none;font-size:1.3rem;background:none;color:var(--text);}
+
+/* ============ HERO ============ */
+.banner{
+  position:relative;min-height:92vh;display:flex;align-items:center;
+  padding:4rem 2rem;gap:3rem;flex-wrap:wrap;
+  background:
+    radial-gradient(circle at 85% 20%, rgba(233,84,32,.18), transparent 45%),
+    radial-gradient(circle at 10% 80%, rgba(62,180,137,.12), transparent 40%),
+    var(--bg);
+}
+.banner .contenido{flex:1 1 420px;z-index:1;}
+.eyebrow{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.78rem;color:var(--green);background:rgba(62,180,137,.1);border:1px solid rgba(62,180,137,.3);padding:.3rem .8rem;border-radius:999px;margin-bottom:1.2rem;}
+.banner h2{font-size:clamp(2rem,5vw,3.4rem);line-height:1.08;margin-bottom:1.1rem;}
+.banner h2 span{color:var(--orange);}
+.banner p{color:var(--text-dim);max-width:46ch;margin-bottom:1.8rem;font-size:1.05rem;}
+.hero-actions{display:flex;gap:.9rem;flex-wrap:wrap;}
+
+.terminal-hero{
+  flex:1 1 460px;background:var(--code-bg);border:1px solid var(--border);
+  border-radius:var(--radius);overflow:hidden;box-shadow:0 30px 60px rgba(0,0,0,.45);z-index:1;
+}
+.terminal-hero .tbar{display:flex;align-items:center;gap:.4rem;padding:.7rem 1rem;background:var(--bg-panel-2);}
+.tdot{width:10px;height:10px;border-radius:50%;}
+.tdot.r{background:#ff5f57;} .tdot.y{background:#febc2e;} .tdot.g{background:#28c840;}
+.tbar span{margin-left:.7rem;font-family:var(--mono);font-size:.75rem;color:var(--text-faint);}
+.terminal-hero .tbody{padding:1.3rem;font-family:var(--mono);font-size:.92rem;min-height:230px;color:var(--green);}
+.terminal-hero .tbody .linea{margin-bottom:.5rem;color:var(--text);}
+.terminal-hero .tbody .prompt{color:var(--green);}
+.terminal-hero .tbody .path{color:var(--orange);}
+.cursor{display:inline-block;width:8px;height:1.1em;background:var(--green);vertical-align:middle;animation:parpadeo 1s steps(1) infinite;}
+@keyframes parpadeo{50%{opacity:0;}}
+
+/* ============ PROGRESO ============ */
+.barra{position:sticky;top:64px;z-index:40;height:5px;background:var(--bg-panel);}
+#progreso{height:100%;width:0%;background:linear-gradient(90deg,var(--orange),var(--green));transition:width .4s ease;}
+
+/* ============ SECTION SHELL ============ */
+section{padding:5rem 2rem;position:relative;z-index:1;}
+.section-head{max-width:900px;margin:0 auto 2.6rem;}
+.section-head .num{font-family:var(--mono);color:var(--green);font-size:.85rem;letter-spacing:.08em;}
+.section-head h2{font-size:clamp(1.7rem,3.4vw,2.6rem);margin:.4rem 0 .6rem;display:flex;align-items:center;gap:.7rem;}
+.section-head h2 i{color:var(--orange);}
+.section-head h3{font-weight:500;color:var(--text-dim);font-size:1.05rem;}
+.section-head p{color:var(--text-dim);margin-top:.8rem;max-width:70ch;}
+
+.grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:1.4rem;max-width:1200px;margin:0 auto;
+}
+.card{
+  background:var(--bg-panel);border:1px solid var(--border);border-radius:var(--radius);
+  padding:1.5rem;display:flex;flex-direction:column;gap:.7rem;transition:transform .2s, border-color .2s, box-shadow .2s;
+}
+.card:hover{transform:translateY(-4px);border-color:var(--orange-dim);box-shadow:0 14px 30px rgba(0,0,0,.35);}
+.card .icon-wrap{
+  width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+  background:rgba(233,84,32,.12);color:var(--orange);font-size:1.25rem;
+}
+.card h3{font-size:1.05rem;}
+.card p{color:var(--text-dim);font-size:.92rem;}
+.card ul{color:var(--text-dim);font-size:.9rem;padding-left:1.2rem;}
+.card ul li{margin-bottom:.2rem;}
+.card code, .codeline{
+  display:block;background:var(--code-bg);color:var(--green);font-family:var(--mono);
+  padding:.6rem .8rem;border-radius:8px;font-size:.85rem;overflow-x:auto;border:1px solid var(--border);
+}
+.card-actions{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:auto;}
+.card-actions button{padding:.5rem 1rem;font-size:.82rem;}
+table{width:100%;border-collapse:collapse;font-size:.88rem;}
+th,td{padding:.5rem .6rem;text-align:left;border-bottom:1px solid var(--border);color:var(--text-dim);}
+th{color:var(--text);font-family:var(--mono);font-size:.8rem;}
+.chip-row{display:flex;flex-wrap:wrap;gap:.5rem;}
+.chip{
+  font-family:var(--mono);font-size:.78rem;padding:.35rem .7rem;border-radius:999px;
+  background:var(--bg-panel-2);border:1px solid var(--border);color:var(--text-dim);
+}
+
+/* ============ TEASER DE UNIDAD ============ */
+.unidad-teaser{
+  max-width:680px;margin:0 auto;text-align:center;background:var(--bg-panel);
+  border:1px solid var(--border);border-radius:var(--radius);padding:2.4rem 2rem;
+}
+.unidad-teaser .icon-wrap-grande{
+  width:58px;height:58px;border-radius:14px;display:flex;align-items:center;justify-content:center;
+  background:rgba(233,84,32,.12);color:var(--orange);font-size:1.7rem;margin:0 auto 1.1rem;
+}
+.unidad-teaser p{color:var(--text-dim);margin-bottom:1.2rem;}
+.unidad-teaser .chip-row{justify-content:center;margin-bottom:1.4rem;}
+
+/* ============ JUEGOS ============ */
+.juego-box{
+  background:var(--bg-panel);border:1px solid var(--border);border-radius:var(--radius);
+  padding:1.6rem;min-height:120px;
+}
+.juego-box .juego-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:.6rem;}
+.juego-head h3{display:flex;align-items:center;gap:.5rem;}
+.juego-head h3 i{color:var(--orange);}
+.juego-area{min-height:80px;}
+.estado{font-family:var(--mono);font-size:.85rem;color:var(--text-dim);margin-top:.7rem;}
+
+/* memorama */
+.memo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;max-width:480px;}
+.memo-card{
+  aspect-ratio:1/1;background:var(--bg-panel-2);border:1px solid var(--border);border-radius:10px;
+  display:flex;align-items:center;justify-content:center;text-align:center;font-family:var(--mono);
+  font-size:.8rem;cursor:pointer;user-select:none;padding:.3rem;color:transparent;transition:.2s;
+}
+.memo-card.volteada, .memo-card.match{color:var(--text);background:var(--aubergine);}
+.memo-card.match{border-color:var(--green);color:var(--green);cursor:default;}
+
+/* ruleta */
+.ruleta-wrap{display:flex;gap:2rem;align-items:center;flex-wrap:wrap;}
+.rueda-cont{position:relative;width:240px;height:240px;flex-shrink:0;}
+.rueda{width:100%;height:100%;border-radius:50%;border:6px solid var(--bg-panel-2);transition:transform 4s cubic-bezier(.15,.75,.25,1);}
+.puntero{position:absolute;top:-8px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:12px solid transparent;border-right:12px solid transparent;border-top:20px solid var(--orange);z-index:2;}
+.ruleta-resultado{flex:1;min-width:220px;}
+.ruleta-resultado .rcard{background:var(--code-bg);border:1px solid var(--border);border-radius:10px;padding:1rem;}
+
+/* ahorcado */
+.ahorcado-wrap{display:flex;gap:2rem;flex-wrap:wrap;align-items:flex-start;}
+.palabra-oculta{font-family:var(--mono);font-size:1.6rem;letter-spacing:.35em;margin:.8rem 0;}
+.teclado{display:flex;flex-wrap:wrap;gap:.35rem;max-width:420px;}
+.tecla{
+  width:34px;height:34px;border-radius:6px;background:var(--bg-panel-2);border:1px solid var(--border);
+  color:var(--text);font-family:var(--mono);padding:0;font-size:.85rem;
+}
+.tecla.correcta{background:var(--green);color:#0a1f16;}
+.tecla.incorrecta{background:#c0392b;color:#fff;}
+.tecla:disabled{opacity:.5;}
+
+/* drag&drop */
+.dnd-wrap{display:grid;grid-template-columns:1fr 1fr;gap:2rem;}
+.dnd-col h4{font-family:var(--mono);color:var(--text-faint);font-size:.8rem;margin-bottom:.6rem;text-transform:uppercase;letter-spacing:.05em;}
+.dnd-item{
+  padding:.7rem .9rem;background:var(--bg-panel-2);border:1px solid var(--border);border-radius:8px;
+  margin-bottom:.6rem;cursor:grab;font-family:var(--mono);font-size:.85rem;
+}
+.dnd-drop{
+  padding:.8rem .9rem;border:2px dashed var(--border);border-radius:8px;margin-bottom:.6rem;
+  min-height:44px;font-size:.85rem;color:var(--text-dim);display:flex;align-items:center;justify-content:space-between;gap:.5rem;
+}
+.dnd-drop.over{border-color:var(--orange);}
+.dnd-drop.ok{border-color:var(--green);border-style:solid;color:var(--green);}
+.dnd-drop.bad{border-color:#c0392b;border-style:solid;}
+@media(max-width:640px){.dnd-wrap{grid-template-columns:1fr;}}
+
+/* puzzle */
+.puzzle-grid{display:grid;grid-template-columns:repeat(3,80px);grid-template-rows:repeat(3,80px);gap:5px;}
+.puzzle-tile{
+  background:linear-gradient(135deg,var(--orange),var(--aubergine));border-radius:8px;
+  display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:1.4rem;font-weight:700;
+  color:#fff;cursor:pointer;transition:.15s;
+}
+.puzzle-tile.vacio{background:transparent;cursor:default;}
+
+/* flashcards */
+.flash-stage{display:flex;flex-direction:column;align-items:center;gap:1rem;}
+.flashcard{
+  width:100%;max-width:360px;height:200px;perspective:1000px;cursor:pointer;
+}
+.flashcard-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;}
+.flashcard.flip .flashcard-inner{transform:rotateY(180deg);}
+.flashcard-face{
+  position:absolute;inset:0;backface-visibility:hidden;border-radius:var(--radius);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:1rem;
+  border:1px solid var(--border);
+}
+.flashcard-face.front{background:var(--bg-panel-2);}
+.flashcard-face.back{background:var(--aubergine);transform:rotateY(180deg);color:var(--text);font-size:.95rem;}
+.flashcard-face.front code{font-size:1.4rem;background:none;border:none;padding:0;}
+
+/* ============ TERMINAL ============ */
+.terminal-full{max-width:900px;margin:0 auto;background:var(--code-bg);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.4);}
+.terminal-full .tbar{display:flex;align-items:center;gap:.4rem;padding:.7rem 1rem;background:var(--bg-panel-2);}
+.pantalla{
+  height:340px;overflow-y:auto;padding:1rem 1.2rem;font-family:var(--mono);font-size:.88rem;color:var(--text);
+}
+.pantalla .linea{margin-bottom:.35rem;white-space:pre-wrap;word-break:break-word;}
+.pantalla .out{color:var(--text-dim);}
+.pantalla .err{color:#ff7a68;}
+.pantalla .ok{color:var(--green);}
+.linea-input{display:flex;align-items:center;padding:.6rem 1.2rem;border-top:1px solid var(--border);gap:.5rem;}
+.linea-input span{font-family:var(--mono);color:var(--green);}
+.linea-input input{
+  flex:1;background:none;border:none;outline:none;color:var(--text);font-family:var(--mono);font-size:.9rem;
+}
+.terminal-help{max-width:900px;margin:1.2rem auto 0;color:var(--text-faint);font-size:.85rem;text-align:center;}
+
+/* ============ QUIZ GENERAL ============ */
+.quiz{max-width:640px;margin:0 auto;background:var(--bg-panel);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;text-align:center;}
+#pregunta{font-size:1.2rem;margin-bottom:1.4rem;font-family:var(--display);}
+.quiz-opciones{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:1.4rem;}
+.quiz-opciones button{background:var(--bg-panel-2);border:1px solid var(--border);color:var(--text);}
+.quiz-opciones button.correcta{background:var(--green);border-color:var(--green);color:#0a1f16;}
+.quiz-opciones button.incorrecta{background:#c0392b;border-color:#c0392b;color:#fff;}
+.quiz-footer{display:flex;justify-content:space-between;align-items:center;margin-top:1rem;}
+#puntos{font-size:2.6rem;color:var(--orange);}
+.progreso-quiz{font-family:var(--mono);font-size:.8rem;color:var(--text-faint);}
+
+/* ============ CERTIFICADO ============ */
+.certificado-marco{
+  max-width:820px;margin:0 auto;background:#fdfaf3;border:3px solid #c9a227;
+  padding:14px;border-radius:4px;box-shadow:0 30px 70px rgba(0,0,0,.5);position:relative;
+}
+.cert-contenido{
+  border:1px solid #c9a227;padding:3rem 2.4rem 2.4rem;text-align:center;position:relative;overflow:hidden;
+}
+.cert-esquina{position:absolute;width:54px;height:54px;pointer-events:none;}
+.cert-esquina.tl{top:8px;left:8px;}
+.cert-esquina.tr{top:8px;right:8px;transform:scaleX(-1);}
+.cert-esquina.bl{bottom:8px;left:8px;transform:scaleY(-1);}
+.cert-esquina.br{bottom:8px;right:8px;transform:scale(-1,-1);}
+.cert-titulo{font-family:var(--display);font-weight:700;font-size:2.5rem;letter-spacing:.04em;color:#5c3d10;}
+.cert-subtitulo{font-family:var(--display);font-weight:500;font-size:1.05rem;letter-spacing:.35em;color:#c9a227;margin:.35rem 0 1.8rem;}
+.cert-otorga{color:#7a6a4a;font-size:.95rem;margin-bottom:.4rem;}
+.cert-nombre{font-family:'Great Vibes',cursive;font-size:3.1rem;color:#5c3d10;min-height:4rem;line-height:1.3;}
+.cert-linea{width:55%;height:1px;background:#c9a227;margin:.2rem auto 1.5rem;}
+.cert-desc{color:#6b5b3e;font-size:.92rem;max-width:58ch;margin:0 auto 1rem;line-height:1.7;}
+.cert-fecha{color:#8a7550;font-family:var(--mono);font-size:.8rem;margin-bottom:2rem;min-height:1.1em;}
+.cert-firmas{display:flex;align-items:flex-end;justify-content:center;gap:2.6rem;flex-wrap:wrap;}
+.firma-col{display:flex;flex-direction:column;align-items:center;gap:.5rem;color:#6b5b3e;font-size:.85rem;}
+.firma-linea{width:130px;height:1px;background:#7a6a4a;}
+.sello-dorado{
+  width:66px;height:66px;border-radius:50%;position:relative;
+  background:radial-gradient(circle at 35% 30%, #fff6d6, #d4af37 55%, #97721b 100%);
+  border:3px solid #f0d878;box-shadow:0 6px 14px rgba(0,0,0,.35);
+}
+.sello-dorado::before, .sello-dorado::after{
+  content:'';position:absolute;top:58px;width:16px;height:32px;background:#c9a227;
+}
+.sello-dorado::before{left:10px;clip-path:polygon(0 0,100% 0,100% 100%,50% 78%,0 100%);transform:rotate(-10deg);}
+.sello-dorado::after{right:10px;clip-path:polygon(0 0,100% 0,100% 100%,50% 78%,0 100%);transform:rotate(10deg);}
+.cert-controles{max-width:820px;margin:1.6rem auto 0;display:flex;gap:.8rem;flex-wrap:wrap;justify-content:center;}
+#nombreAlumno{padding:.7rem 1rem;border-radius:8px;border:1px solid var(--border);background:var(--code-bg);color:var(--text);font-family:var(--body);min-width:260px;}
+
+/* ============ GALERIA ============ */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.2rem;max-width:1100px;margin:0 auto;}
+.stat-card{background:var(--bg-panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.6rem;text-align:center;}
+.stat-card i{font-size:1.8rem;color:var(--orange);margin-bottom:.6rem;}
+.stat-card h3{font-family:var(--display);font-size:1.6rem;color:var(--text);}
+.stat-card p{color:var(--text-dim);font-size:.85rem;margin-top:.3rem;}
+
+/* ============ CURIOSIDADES ============ */
+.curio-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.2rem;max-width:1100px;margin:0 auto;}
+.curio-card{
+  background:var(--bg-panel-2);border:1px solid var(--border);border-radius:var(--radius);padding:1.3rem;
+  font-size:.95rem;color:var(--text-dim);display:flex;gap:.8rem;align-items:flex-start;
+}
+.curio-card i{color:var(--green);font-size:1.2rem;margin-top:.15rem;}
+
+/* ============ PROGRESO GLOBAL ============ */
+.progress-panel{max-width:640px;margin:0 auto;text-align:center;}
+.progress{height:16px;background:var(--bg-panel-2);border-radius:999px;overflow:hidden;border:1px solid var(--border);margin-top:1rem;}
+#barra{height:100%;width:0%;background:linear-gradient(90deg,var(--green),var(--orange));display:flex;align-items:center;justify-content:flex-end;color:#0a1f16;font-family:var(--mono);font-size:.7rem;font-weight:700;padding-right:6px;transition:width .5s;}
+
+/* ============ FOOTER ============ */
+footer{background:var(--bg-panel);border-top:1px solid var(--border);padding:3rem 2rem 2rem;text-align:center;}
+.footer h2{margin-bottom:.4rem;}
+.footer p{color:var(--text-dim);font-size:.9rem;}
+.redes{display:flex;justify-content:center;gap:1.2rem;margin:1.4rem 0;font-size:1.3rem;color:var(--text-dim);}
+.redes i:hover{color:var(--orange);cursor:pointer;}
+
+@media(max-width:780px){
+  nav{position:fixed;top:64px;left:0;right:0;background:var(--bg-panel);flex-direction:column;padding:1rem 2rem;display:none;border-bottom:1px solid var(--border);}
+  nav.abierto{display:flex;}
+  #hamb{display:block;}
+  .dnd-wrap{grid-template-columns:1fr;}
+  .quiz-opciones{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<div id="particulas"></div>
+
+<header>
+  <div class="logo"><i class="fab fa-linux"></i><h1>Linux &amp; Bash</h1></div>
+  <button id="hamb" onclick="document.getElementById('nav').classList.toggle('abierto')"><i class="fas fa-bars"></i></button>
+  <nav id="nav">
+    <a onclick="cerrarNav()" href="#inicio">Inicio</a>
+    <a onclick="abrirUnidad(1)">Unidad 1</a>
+    <a onclick="abrirUnidad(2)">Unidad 2</a>
+    <a onclick="abrirUnidad(3)">Unidad 3</a>
+    <a onclick="abrirUnidad(4)">Unidad 4</a>
+    <a onclick="cerrarNav()" href="#juegos">Juegos</a>
+    <a onclick="cerrarNav()" href="#terminal">Terminal</a>
+    <a onclick="cerrarNav()" href="#quiz">Evaluación</a>
+    <a onclick="cerrarNav()" href="#certificado">Certificado</a>
+  </nav>
+</header>
+
+<section id="inicio" class="banner">
+  <div class="contenido">
+    <span class="eyebrow"><i class="fas fa-circle" style="font-size:.5rem;"></i> CURSO INTERACTIVO</span>
+    <h2>Domina <span>Linux</span> desde la terminal, no desde un PDF.</h2>
+    <p>Tarjetas de texto, una terminal Bash simulada y seis juegos para aprender los comandos que de verdad se usan todos los días. Cada unidad se abre en su propia ventana, con su propia evaluación al final.</p>
+    <div class="hero-actions">
+      <button onclick="abrirUnidad(1)"><i class="fas fa-play"></i>&nbsp; Comenzar</button>
+      <button class="ghost" onclick="document.getElementById('terminal').scrollIntoView({behavior:'smooth'})"><i class="fas fa-terminal"></i>&nbsp; Abrir terminal</button>
+    </div>
+  </div>
+  <div class="terminal-hero">
+    <div class="tbar"><span class="tdot r"></span><span class="tdot y"></span><span class="tdot g"></span><span>alumno@linux-bash: ~</span></div>
+    <div class="tbody" id="heroTyping"></div>
+  </div>
+</section>
+
+<section class="barra"><div id="progreso"></div></section>
+
+<!-- ===================== UNIDAD 1 ===================== -->
+<section id="unidad1">
+  <div class="section-head">
+    <span class="num">UNIDAD 01</span>
+    <h2><i class="fab fa-linux"></i> Introducción a Linux y la Consola Bash</h2>
+    <h3>Historia, filosofía y anatomía del sistema operativo libre</h3>
+    <p>Antes de tocar el teclado conviene entender de dónde viene Linux, por qué se creó, cómo se organiza por dentro y qué lo hace distinto de otros sistemas operativos comerciales. Esta unidad cubre once temas, desde la historia del proyecto hasta la estructura de directorios y los permisos de usuario.</p>
+  </div>
+  <div class="unidad-teaser" id="teaser1"></div>
+</section>
+
+<!-- ===================== UNIDAD 2 ===================== -->
+<section id="unidad2">
+  <div class="section-head">
+    <span class="num">UNIDAD 02</span>
+    <h2><i class="fas fa-terminal"></i> Comandos Básicos de Bash</h2>
+    <h3>El vocabulario esencial de la terminal</h3>
+    <p>Doce comandos que se usan a diario para moverse, crear, copiar, mover, eliminar y buscar información dentro del sistema de archivos. Cada uno incluye un ejemplo real que puedes enviar directo a la terminal interactiva desde la ventana de la unidad.</p>
+  </div>
+  <div class="unidad-teaser" id="teaser2"></div>
+</section>
+
+<!-- ===================== UNIDAD 3 ===================== -->
+<section id="unidad3">
+  <div class="section-head">
+    <span class="num">UNIDAD 03</span>
+    <h2><i class="fas fa-user-shield"></i> Administración del Sistema</h2>
+    <h3>Usuarios, permisos y procesos</h3>
+    <p>Todo lo que necesita saber quien administra una máquina Linux día a día: creación de usuarios y grupos, permisos con chmod y chown, monitoreo de procesos, uso de disco, variables de entorno y gestión de paquetes.</p>
+  </div>
+  <div class="unidad-teaser" id="teaser3"></div>
+</section>
+
+<!-- ===================== UNIDAD 4 ===================== -->
+<section id="unidad4">
+  <div class="section-head">
+    <span class="num">UNIDAD 04</span>
+    <h2><i class="fas fa-code"></i> Automatización y Scripts Bash</h2>
+    <h3>De comandos sueltos a programas completos</h3>
+    <p>Todo script comienza igual: una línea de comandos que decides guardar y reutilizar. En esta unidad se explica la estructura de un script, el uso de variables, condicionales, bucles, funciones y la automatización de tareas con cron.</p>
+  </div>
+  <div class="unidad-teaser" id="teaser4"></div>
+</section>
+
+<!-- ===================== JUEGOS ===================== -->
+<section id="juegos">
+  <div class="section-head">
+    <span class="num">PRACTICA</span>
+    <h2><i class="fas fa-gamepad"></i> Juegos Interactivos</h2>
+    <h3>Aprende jugando, aquí mismo — sin salir de la página</h3>
+  </div>
+
+  <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(340px,1fr));">
+
+    <div class="juego-box">
+      <div class="juego-head"><h3><i class="fas fa-brain"></i> Memorama Linux</h3><button class="ghost" onclick="Memorama.iniciar()">Reiniciar</button></div>
+      <div class="juego-area"><div class="memo-grid" id="memoGrid"></div></div>
+      <div class="estado" id="memoEstado">Encuentra la pareja entre comando y función.</div>
+    </div>
+
+    <div class="juego-box">
+      <div class="juego-head"><h3><i class="fas fa-circle-notch"></i> Ruleta Bash</h3><button onclick="Ruleta.girar()">Girar</button></div>
+      <div class="juego-area ruleta-wrap">
+        <div class="rueda-cont"><div class="puntero"></div><div class="rueda" id="rueda"></div></div>
+        <div class="ruleta-resultado"><div class="rcard" id="ruletaCard">Gira la ruleta para descubrir un comando al azar.</div></div>
+      </div>
+    </div>
+
+    <div class="juego-box">
+      <div class="juego-head"><h3><i class="fas fa-user-ninja"></i> Ahorcado</h3><button class="ghost" onclick="Ahorcado.iniciar()">Nueva palabra</button></div>
+      <div class="juego-area ahorcado-wrap">
+        <div>
+          <svg width="120" height="140" id="hangSvg" viewBox="0 0 120 140">
+            <line x1="10" y1="135" x2="90" y2="135" stroke="#c3aec6" stroke-width="4"/>
+            <line x1="30" y1="135" x2="30" y2="10" stroke="#c3aec6" stroke-width="4"/>
+            <line x1="30" y1="10" x2="80" y2="10" stroke="#c3aec6" stroke-width="4"/>
+            <line x1="80" y1="10" x2="80" y2="26" stroke="#c3aec6" stroke-width="4"/>
+            <g id="hangParts"></g>
+          </svg>
+          <div class="palabra-oculta" id="palabraOculta"></div>
+          <div class="estado" id="ahorcadoEstado">Adivina el comando oculto.</div>
+        </div>
+        <div class="teclado" id="teclado"></div>
+      </div>
+    </div>
+
+    <div class="juego-box">
+      <div class="juego-head"><h3><i class="fas fa-arrows-up-down-left-right"></i> Arrastrar y Soltar</h3><button class="ghost" onclick="DragDrop.iniciar()">Reiniciar</button></div>
+      <div class="juego-area dnd-wrap">
+        <div class="dnd-col"><h4>Comandos</h4><div id="dndItems"></div></div>
+        <div class="dnd-col"><h4>Funciones</h4><div id="dndDrops"></div></div>
+      </div>
+      <div class="estado" id="dndEstado">Arrastra cada comando hasta su función correcta.</div>
+    </div>
+
+    <div class="juego-box">
+      <div class="juego-head"><h3><i class="fas fa-puzzle-piece"></i> Puzzle Linux</h3><button class="ghost" onclick="Puzzle.iniciar()">Mezclar</button></div>
+      <div class="juego-area"><div class="puzzle-grid" id="puzzleGrid"></div></div>
+      <div class="estado" id="puzzleEstado">Ordena las fichas del 1 al 8.</div>
+    </div>
+
+    <div class="juego-box">
+      <div class="juego-head"><h3><i class="fas fa-clone"></i> Flash Cards</h3><button class="ghost" onclick="Flash.mezclar()">Mezclar</button></div>
+      <div class="juego-area flash-stage">
+        <div class="flashcard" id="flashcard" onclick="Flash.voltear()">
+          <div class="flashcard-inner">
+            <div class="flashcard-face front"><code id="flashFront"></code></div>
+            <div class="flashcard-face back" id="flashBack"></div>
+          </div>
+        </div>
+        <div class="hero-actions">
+          <button class="ghost" onclick="Flash.anterior()"><i class="fas fa-arrow-left"></i></button>
+          <span class="estado" id="flashContador" style="align-self:center;"></span>
+          <button class="ghost" onclick="Flash.siguiente()"><i class="fas fa-arrow-right"></i></button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===================== TERMINAL ===================== -->
+<section id="terminal">
+  <div class="section-head" style="text-align:center;margin-left:auto;margin-right:auto;">
+    <span class="num">LABORATORIO</span>
+    <h2 style="justify-content:center;"><i class="fas fa-terminal"></i> Terminal Linux</h2>
+    <h3>Una Bash simulada, directo en el navegador</h3>
+  </div>
+  <div class="terminal-full">
+    <div class="tbar"><span class="tdot r"></span><span class="tdot y"></span><span class="tdot g"></span><span>alumno@linux-bash: ~</span></div>
+    <div class="pantalla" id="pantalla"></div>
+    <div class="linea-input">
+      <span>alumno@bash:~$</span>
+      <input type="text" id="comando" placeholder="Escribe un comando, o 'help'" autocomplete="off" onkeydown="Terminal.tecla(event)">
+      <button onclick="Terminal.ejecutar()">Ejecutar</button>
+    </div>
+  </div>
+  <p class="terminal-help">Prueba: <span class="mono">pwd</span>, <span class="mono">ls</span>, <span class="mono">mkdir proyecto</span>, <span class="mono">cd proyecto</span>, <span class="mono">touch nota.txt</span>, <span class="mono">echo hola > nota.txt</span>, <span class="mono">cat nota.txt</span>, <span class="mono">help</span></p>
+</section>
+
+<!-- ===================== QUIZ GENERAL ===================== -->
+<section id="quiz">
+  <div class="section-head" style="text-align:center;margin-left:auto;margin-right:auto;">
+    <span class="num">EVALUACIÓN GENERAL</span>
+    <h2 style="justify-content:center;"><i class="fas fa-question-circle"></i> Evaluación Final</h2>
+    <p style="margin-left:auto;margin-right:auto;">Cada unidad tiene su propia evaluación corta dentro de su ventana. Esta es la evaluación general acumulativa, con preguntas de las cuatro unidades.</p>
+  </div>
+  <div class="quiz">
+    <div class="progreso-quiz" id="quizProgreso">Pregunta 1 de 8</div>
+    <div id="pregunta"></div>
+    <div class="quiz-opciones" id="quizOpciones"></div>
+    <div class="quiz-footer">
+      <h3 style="font-size:.9rem;color:var(--text-dim);">Puntaje: <span id="puntos">0</span></h3>
+      <button class="ghost" onclick="Quiz.reiniciar()">Reiniciar</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CERTIFICADO ===================== -->
+<section id="certificado">
+  <div class="section-head" style="text-align:center;margin-left:auto;margin-right:auto;">
+    <span class="num">LOGRO</span>
+    <h2 style="justify-content:center;">🏆 Certificado</h2>
+    <p style="margin-left:auto;margin-right:auto;">Escribe tu nombre y genera tu certificado de finalización del curso.</p>
+  </div>
+
+  <div class="certificado-marco">
+    <div class="cert-contenido">
+      <svg class="cert-esquina tl" viewBox="0 0 60 60"><path d="M3 3 Q3 34 34 34 M3 3 Q34 3 34 34" stroke="#c9a227" stroke-width="1.4" fill="none"/><circle cx="3" cy="3" r="3" fill="#c9a227"/><path d="M3 40 Q3 55 18 55" stroke="#c9a227" stroke-width="1" fill="none"/></svg>
+      <svg class="cert-esquina tr" viewBox="0 0 60 60"><path d="M3 3 Q3 34 34 34 M3 3 Q34 3 34 34" stroke="#c9a227" stroke-width="1.4" fill="none"/><circle cx="3" cy="3" r="3" fill="#c9a227"/><path d="M3 40 Q3 55 18 55" stroke="#c9a227" stroke-width="1" fill="none"/></svg>
+      <svg class="cert-esquina bl" viewBox="0 0 60 60"><path d="M3 3 Q3 34 34 34 M3 3 Q34 3 34 34" stroke="#c9a227" stroke-width="1.4" fill="none"/><circle cx="3" cy="3" r="3" fill="#c9a227"/><path d="M3 40 Q3 55 18 55" stroke="#c9a227" stroke-width="1" fill="none"/></svg>
+      <svg class="cert-esquina br" viewBox="0 0 60 60"><path d="M3 3 Q3 34 34 34 M3 3 Q34 3 34 34" stroke="#c9a227" stroke-width="1.4" fill="none"/><circle cx="3" cy="3" r="3" fill="#c9a227"/><path d="M3 40 Q3 55 18 55" stroke="#c9a227" stroke-width="1" fill="none"/></svg>
+
+      <div class="cert-titulo">CERTIFICADO</div>
+      <div class="cert-subtitulo">DE PARTICIPACIÓN</div>
+      <p class="cert-otorga">Este certificado se otorga a</p>
+      <div class="cert-nombre" id="certNombre">&nbsp;</div>
+      <div class="cert-linea"></div>
+      <p class="cert-desc">En reconocimiento por su dedicación y compromiso al completar el curso interactivo <strong>Linux &amp; Bash</strong>, demostrando conocimientos en administración de sistemas, comandos de terminal y automatización mediante scripts.</p>
+      <div class="cert-fecha" id="certFecha"></div>
+      <div class="cert-firmas">
+        <div class="firma-col"><span class="firma-linea"></span><span>Instructor(a)</span></div>
+        <div class="sello-dorado"></div>
+        <div class="firma-col"><span class="firma-linea"></span><span>Coordinación Académica</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cert-controles">
+    <input type="text" placeholder="Escribe tu nombre completo" id="nombreAlumno">
+    <button onclick="certificado()">Generar certificado</button>
+    <button class="ghost" onclick="window.print()"><i class="fas fa-print"></i>&nbsp; Imprimir / Guardar PDF</button>
+  </div>
+</section>
+
+<!-- ===================== LINUX EN EL MUNDO ===================== -->
+<section id="galeria">
+  <div class="section-head" style="text-align:center;margin-left:auto;margin-right:auto;">
+    <span class="num">IMPACTO</span>
+    <h2 style="justify-content:center;">Linux en el mundo real</h2>
+  </div>
+  <div class="stat-grid" id="statGrid"></div>
+</section>
+
+<!-- ===================== CURIOSIDADES ===================== -->
+<section>
+  <div class="section-head" style="text-align:center;margin-left:auto;margin-right:auto;">
+    <h2 style="justify-content:center;">¿Sabías que...?</h2>
+  </div>
+  <div class="curio-grid" id="curioGrid"></div>
+</section>
+
+<!-- ===================== PROGRESO GLOBAL ===================== -->
+<section>
+  <div class="progress-panel">
+    <h2>Mi progreso</h2>
+    <p style="color:var(--text-dim);font-size:.9rem;">Se actualiza mientras recorres las unidades del curso.</p>
+    <div class="progress"><div id="barra">0%</div></div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer">
+    <h2>Linux &amp; Bash</h2>
+    <p>Plataforma educativa interactiva.</p>
+    <p>Universidad Central del Ecuador</p>
+    <p>Pedagogía de Informática</p>
+    <div class="redes">
+      <i class="fab fa-github"></i>
+      <i class="fab fa-youtube"></i>
+      <i class="fab fa-linux"></i>
+      <i class="fab fa-html5"></i>
+      <i class="fab fa-css3"></i>
+      <i class="fab fa-js"></i>
+    </div>
+    <p>© 2026 Todos los derechos reservados</p>
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   PARTÍCULAS DE FONDO
+============================================================ */
+(function(){
+  const cont=document.getElementById('particulas');
+  for(let i=0;i<28;i++){
+    const p=document.createElement('div');
+    p.className='particula';
+    p.style.left=Math.random()*100+'vw';
+    p.style.animationDuration=(8+Math.random()*10)+'s';
+    p.style.animationDelay=(Math.random()*10)+'s';
+    p.style.opacity=(.2+Math.random()*.5);
+    cont.appendChild(p);
+  }
+})();
+
+function cerrarNav(){ document.getElementById('nav').classList.remove('abierto'); }
+
+/* ============================================================
+   DATOS DE LAS 4 UNIDADES (sin videos, con texto ampliado
+   y una evaluación propia por unidad)
+============================================================ */
+const UNIDADES = {
+  1: {
+    titulo:'Introducción a Linux y la Consola Bash',
+    icon:'fab fa-linux',
+    resumen:'Fundamentos antes de tocar el teclado: qué es Linux, por qué existe, cómo se organiza y qué lo diferencia de otros sistemas operativos. Once temas para construir una base sólida antes de escribir el primer comando.',
+    temas:[
+      {icon:'fa-clock-rotate-left', titulo:'Historia de Linux',
+       texto:'Linux nació en 1991 gracias a Linus Torvalds, entonces un estudiante finlandés que quería un sistema tipo Unix para su propia computadora. Publicó el código fuente en un grupo de noticias y pidió ayuda a otros programadores; esa decisión convirtió a Linux en uno de los proyectos colaborativos más grandes de la historia. Hoy impulsa servidores, supercomputadoras y miles de millones de dispositivos móviles. Al ser software libre, cualquier persona puede leer, modificar y redistribuir su código fuente.'},
+      {icon:'fa-microchip', titulo:'¿Qué es un Sistema Operativo?',
+       texto:'Es el software encargado de administrar el hardware de un equipo (procesador, memoria, disco, red) y de permitir que se ejecuten los demás programas sobre esa base. Sin un sistema operativo, cada aplicación tendría que hablar directamente con el hardware, lo cual sería extremadamente ineficiente. Windows, Linux y macOS son ejemplos de sistemas operativos, pero solo Linux es abierto de raíz: su núcleo y la mayoría de sus herramientas pueden inspeccionarse libremente.'},
+      {icon:'fa-list-check', titulo:'Características de Linux',
+       texto:'Estas cualidades explican por qué Linux domina el mundo de los servidores y de los dispositivos empotrados.',
+       lista:['Libre — el código fuente está disponible para todos','Seguro — el modelo de permisos limita el daño de un error','Multitarea — ejecuta muchos procesos a la vez','Multiusuario — varias personas pueden trabajar en el mismo equipo','Estable — puede funcionar meses sin reiniciarse','Personalizable — cada pieza del sistema puede sustituirse']},
+      {icon:'fa-layer-group', titulo:'Distribuciones Linux',
+       texto:'Un mismo núcleo, muchos sabores. Cada distribución empaqueta el kernel Linux junto con sus propias herramientas de instalación, gestor de paquetes, entorno gráfico y filosofía de actualización. Elegir una distribución depende del uso: aprendizaje, servidores, seguridad o uso diario en un equipo personal.',
+       chips:['Ubuntu','Debian','Fedora','Arch Linux','Kali Linux','Linux Mint'],
+       accionTexto:'Dato al azar', accion:"if(window.opener && window.opener.juegoDistribuciones){window.opener.juegoDistribuciones();window.opener.focus();}else{alert('Abre esta unidad desde la página principal para ver el dato.');}"},
+      {icon:'fa-terminal', titulo:'Terminal Linux',
+       texto:'La terminal permite controlar por completo el sistema mediante comandos, sin depender del mouse ni de menús gráficos. Al principio puede parecer intimidante, pero cada comando sigue una lógica simple: un verbo (la acción) seguido de argumentos (sobre qué actuar) y opciones (cómo actuar). Dominarla es la habilidad más rentable que puede aprender alguien que trabaja con sistemas Linux.'},
+      {icon:'fa-scroll', titulo:'¿Qué es Bash?',
+       texto:'Bash significa Bourne Again Shell: es el intérprete de comandos que usan la mayoría de distribuciones Linux por defecto. Se encarga de leer lo que escribes, interpretarlo y pedirle al sistema operativo que lo ejecute. Además de ejecutar comandos sueltos, Bash es también un lenguaje de programación completo, lo que permite escribir scripts para automatizar tareas repetitivas.'},
+      {icon:'fa-window-restore', titulo:'GUI vs CLI',
+       texto:'Ambas formas de interacción conviven en Linux; la elección depende de la tarea. Para configuraciones puntuales, la interfaz gráfica es más intuitiva. Para tareas repetitivas o administración remota de servidores, la línea de comandos es más rápida y potente.',
+       tabla:{cab:['GUI','CLI'], filas:[['Interfaz gráfica','Línea de comandos'],['Uso con mouse','Uso con teclado'],['Más sencilla para empezar','Más potente y automatizable']]}},
+      {icon:'fa-bolt', titulo:'Ventajas de la Terminal',
+       texto:'Aprender la terminal no es un capricho técnico: acelera cualquier trabajo con computadoras.',
+       lista:['Mayor velocidad para tareas repetitivas','Automatización mediante scripts','Control total sobre el sistema','Administración remota de servidores','Consumo reducido de recursos frente a un entorno gráfico']},
+      {icon:'fa-folder-tree', titulo:'Sistema de Archivos',
+       texto:'Linux organiza toda la información en una única jerarquía de directorios que comienza en la raíz "/", a diferencia de otros sistemas que usan letras de unidad. Cada carpeta del primer nivel tiene un propósito bien definido y establecido por convención.',
+       lista:['/home — carpetas personales de cada usuario','/etc — archivos de configuración del sistema','/bin — programas esenciales del sistema','/root — carpeta personal del superusuario','/usr — programas y librerías instaladas','/var — datos que cambian con el uso, como registros']},
+      {icon:'fa-route', titulo:'Navegación',
+       texto:'Estos tres comandos son los primeros que se usan al abrir cualquier terminal y con los que te moverás constantemente por el sistema de archivos.',
+       lista:['pwd — muestra en qué directorio estás parado','cd — te lleva a otro directorio','ls — lista qué archivos y carpetas hay en el directorio actual']},
+      {icon:'fa-user-lock', titulo:'Usuarios y Permisos',
+       texto:'Linux protege archivos y directorios asignando permisos de lectura, escritura y ejecución de forma independiente para el propietario, el grupo y el resto de usuarios. Este modelo, simple pero muy efectivo, es una de las razones por las que Linux es considerado un sistema especialmente seguro para servidores.'}
+    ],
+    quiz:[
+      {p:'¿En qué año nació el proyecto Linux?', o:['1985','1991','2001','1975'], r:1},
+      {p:'¿Qué significa que Linux sea software libre?', o:['Que no tiene código fuente','Que solo lo puede modificar su creador','Que cualquiera puede leerlo, modificarlo y redistribuirlo','Que es gratis pero cerrado'], r:2},
+      {p:'Entre GUI y CLI, ¿cuál ofrece mayor control y automatización?', o:['GUI','CLI','Ambas por igual','Ninguna'], r:1},
+      {p:'¿Qué comando muestra en qué directorio te encuentras?', o:['ls','cd','pwd','cat'], r:2}
+    ]
+  },
+  2: {
+    titulo:'Comandos Básicos de Bash',
+    icon:'fas fa-terminal',
+    resumen:'El vocabulario esencial de la terminal: doce comandos para moverse, crear, copiar, mover, eliminar y buscar archivos. Cada tarjeta trae un ejemplo real que puedes enviar directo a la terminal interactiva de la página principal con el botón "Pruébalo".',
+    temas:[
+      {icon:'fa-location-crosshairs', titulo:'pwd', texto:'Muestra la ruta completa del directorio de trabajo actual. Es el primer comando que conviene ejecutar cuando no se está seguro de en qué carpeta se está parado, especialmente en sesiones remotas por SSH.', ejemplo:'pwd'},
+      {icon:'fa-list', titulo:'ls', texto:'Lista el contenido de una carpeta. Con opciones como -l muestra detalles (permisos, tamaño, fecha) y con -a incluye también los archivos ocultos, que en Linux empiezan con un punto.', ejemplo:'ls'},
+      {icon:'fa-right-to-bracket', titulo:'cd', texto:'Cambia el directorio de trabajo. Usado sin argumentos regresa a la carpeta personal del usuario; con ".." sube un nivel; con una ruta específica te lleva directamente a ella.', ejemplo:'cd Documentos'},
+      {icon:'fa-folder-plus', titulo:'mkdir', texto:'Crea una carpeta nueva. Con la opción -p puede crear varias carpetas anidadas de una sola vez, incluso si las carpetas intermedias todavía no existen.', ejemplo:'mkdir Proyecto'},
+      {icon:'fa-file-circle-plus', titulo:'touch', texto:'Crea un archivo vacío o, si el archivo ya existe, actualiza su fecha de modificación sin tocar su contenido. Es muy usado en scripts para marcar que un proceso terminó.', ejemplo:'touch archivo.txt'},
+      {icon:'fa-copy', titulo:'cp', texto:'Copia archivos o carpetas de un lugar a otro. Con la opción -r copia carpetas completas de forma recursiva, incluyendo todo su contenido.', ejemplo:'cp origen destino'},
+      {icon:'fa-arrows-turn-right', titulo:'mv', texto:'Mueve archivos de una carpeta a otra, y también se usa para renombrarlos, ya que en Linux mover y renombrar son la misma operación interna.', ejemplo:'mv archivo.txt carpeta'},
+      {icon:'fa-trash', titulo:'rm', texto:'Elimina archivos de forma permanente, sin pasar por una papelera de reciclaje. Con -r elimina carpetas completas; conviene usarlo siempre con mucho cuidado.', ejemplo:'rm archivo.txt'},
+      {icon:'fa-file-lines', titulo:'cat', texto:'Muestra el contenido completo de un archivo de texto directamente en la terminal. También puede unir varios archivos, uno detrás de otro, en una sola salida.', ejemplo:'cat archivo.txt'},
+      {icon:'fa-magnifying-glass', titulo:'grep', texto:'Busca coincidencias de un patrón de texto dentro de uno o varios archivos. Es una de las herramientas más usadas para revisar registros y filtrar resultados en scripts.', ejemplo:'grep Linux notas.txt'},
+      {icon:'fa-folder-open', titulo:'find', texto:'Busca archivos y carpetas recorriendo un árbol de directorios, filtrando por nombre, tamaño, fecha de modificación o tipo de archivo, entre muchos otros criterios.', ejemplo:'find /home -name archivo.txt'},
+      {icon:'fa-clock-rotate-left', titulo:'history', texto:'Muestra el historial de comandos ejecutados en la sesión actual, numerados. Se puede repetir un comando anterior escribiendo "!" seguido de su número.', ejemplo:'history'}
+    ],
+    quiz:[
+      {p:'¿Qué comando crea un archivo vacío?', o:['mkdir','touch','cp','rm'], r:1},
+      {p:'¿Qué comando copia archivos o carpetas?', o:['mv','cat','cp','find'], r:2},
+      {p:'¿Qué comando busca texto dentro de archivos?', o:['grep','ls','history','cd'], r:0},
+      {p:'¿Qué comando elimina archivos de forma permanente?', o:['rm','touch','mkdir','pwd'], r:0}
+    ]
+  },
+  3: {
+    titulo:'Administración del Sistema',
+    icon:'fas fa-user-shield',
+    resumen:'Lo que necesita saber quien administra una máquina Linux día a día: usuarios, grupos, permisos, procesos, disco, variables de entorno y gestión de paquetes.',
+    temas:[
+      {icon:'fa-user', titulo:'Usuarios', texto:'Linux permite crear múltiples usuarios, cada uno con su propia carpeta personal, sus propios archivos y sus propios privilegios. El superusuario, llamado root, tiene acceso total al sistema y por eso su uso debe limitarse a tareas administrativas.'},
+      {icon:'fa-users', titulo:'Grupos', texto:'Los grupos facilitan administrar permisos para varios usuarios a la vez, sin tener que asignar permisos individuales a cada uno. Un usuario puede pertenecer a varios grupos simultáneamente.'},
+      {icon:'fa-lock', titulo:'chmod', texto:'Modifica los permisos de lectura, escritura y ejecución de un archivo o carpeta. Los permisos se representan con números del 0 al 7, uno para el propietario, otro para el grupo y otro para el resto.', ejemplo:'chmod 755 archivo.sh'},
+      {icon:'fa-user-tag', titulo:'chown', texto:'Cambia el propietario y, opcionalmente, el grupo de un archivo. Es fundamental cuando se transfieren archivos entre usuarios o al desplegar aplicaciones que deben ejecutarse con un usuario específico.', ejemplo:'chown usuario archivo'},
+      {icon:'fa-info-circle', titulo:'uname', texto:'Muestra información del sistema operativo y del kernel en ejecución. Con la opción -a muestra el detalle completo: nombre del kernel, versión, arquitectura y más.', ejemplo:'uname -a'},
+      {icon:'fa-server', titulo:'hostname', texto:'Muestra el nombre con el que el equipo se identifica dentro de la red. Es útil para confirmar en qué servidor se está trabajando cuando se administran varias máquinas a la vez.', ejemplo:'hostname'},
+      {icon:'fa-id-badge', titulo:'whoami', texto:'Indica el nombre del usuario que tiene la sesión activa en la terminal. Es especialmente útil después de cambiar de usuario con "su" o de conectarse por SSH a otra máquina.', ejemplo:'whoami'},
+      {icon:'fa-hard-drive', titulo:'df', texto:'Consulta el espacio disponible y usado en cada sistema de archivos montado. Con la opción -h muestra los tamaños en unidades legibles como GB o MB en lugar de bloques.', ejemplo:'df -h'},
+      {icon:'fa-chart-pie', titulo:'du', texto:'Calcula el espacio en disco que ocupa una carpeta o un archivo. Combinado con -s y -h se obtiene un resumen legible del tamaño total, muy útil para encontrar qué está llenando el disco.', ejemplo:'du -sh carpeta'},
+      {icon:'fa-list-ol', titulo:'ps', texto:'Lista los procesos en ejecución en el sistema en un momento dado. Con la opción "aux" muestra todos los procesos de todos los usuarios, junto con el consumo de CPU y memoria.', ejemplo:'ps aux'},
+      {icon:'fa-gauge-high', titulo:'top', texto:'Monitorea el sistema en tiempo real: procesos activos, uso de CPU y de memoria, todo actualizándose cada pocos segundos directamente en la terminal.', ejemplo:'top'},
+      {icon:'fa-skull', titulo:'kill', texto:'Finaliza un proceso enviándole una señal, identificándolo por su número de proceso (PID). Es la forma estándar de detener un programa que dejó de responder.', ejemplo:'kill 1234'},
+      {icon:'fa-code-branch', titulo:'Variables de Entorno', texto:'Almacenan información que el sistema y los programas pueden reutilizar, como la ruta de la carpeta personal o la lista de carpetas donde buscar programas ejecutables.', ejemplo:'echo $HOME'},
+      {icon:'fa-arrow-right-arrow-left', titulo:'Redirección', texto:'Los operadores >, >> y < permiten enviar la salida de un comando a un archivo o leer la entrada de un comando desde un archivo, en lugar de usar la pantalla y el teclado.', ejemplo:'ls > lista.txt'},
+      {icon:'fa-box-open', titulo:'Gestión de Paquetes', texto:'Los gestores de paquetes instalan, actualizan y eliminan programas de forma centralizada, resolviendo automáticamente las dependencias que cada programa necesita.', ejemplo:'apt install nombre'}
+    ],
+    quiz:[
+      {p:'¿Qué comando cambia los permisos de un archivo?', o:['chown','chmod','kill','ps'], r:1},
+      {p:'¿Qué comando muestra los procesos en ejecución con detalle?', o:['ps aux','df -h','uname','history'], r:0},
+      {p:'¿Qué comando muestra el espacio disponible en disco?', o:['du','df','top','find'], r:1},
+      {p:'¿Qué operador redirige la salida de un comando a un archivo, sobrescribiéndolo?', o:['|','<','>','&&'], r:2}
+    ]
+  },
+  4: {
+    titulo:'Automatización y Scripts Bash',
+    icon:'fas fa-code',
+    resumen:'De comandos sueltos a programas completos. Esta unidad explica cómo estructurar un script, usar variables, condicionales, bucles y funciones, y cómo programar tareas automáticas con cron.',
+    temas:[
+      {icon:'fa-file-code', titulo:'¿Qué es un Script?', texto:'Un script Bash es un archivo de texto con una serie de comandos que se ejecutan automáticamente, en orden, cada vez que se corre el archivo. Permite convertir tareas manuales repetitivas en un solo comando reutilizable, ahorrando tiempo y reduciendo errores humanos.'},
+      {icon:'fa-align-left', titulo:'Estructura de un Script', texto:'Todo script Bash comienza con una línea especial llamada shebang, que le indica al sistema con qué intérprete debe ejecutarse el archivo. Después de esa línea siguen los comandos normales de la terminal.', codigo:'#!/bin/bash\necho "Hola Mundo"'},
+      {icon:'fa-dollar-sign', titulo:'Variables', texto:'Las variables almacenan valores que se pueden reutilizar dentro del script. Se definen sin espacios alrededor del signo igual y se leen anteponiendo el símbolo $ al nombre de la variable.', codigo:'nombre="Mateo"\necho $nombre'},
+      {icon:'fa-code-branch', titulo:'Condicional IF', texto:'Permite ejecutar un bloque de código solo si se cumple una condición. Es la base para que un script tome decisiones distintas según el valor de una variable o el resultado de un comando.', codigo:'if [ $edad -ge 18 ]\nthen\n  echo Adulto\nfi'},
+      {icon:'fa-rotate', titulo:'Bucle FOR', texto:'Repite un bloque de instrucciones una vez por cada elemento de una lista. Es muy usado para procesar varios archivos, uno por uno, dentro de una misma carpeta.', codigo:'for i in 1 2 3\ndo\n  echo $i\ndone'},
+      {icon:'fa-cube', titulo:'Funciones', texto:'Agrupan un conjunto de comandos bajo un nombre, para poder reutilizarlos varias veces dentro del mismo script sin repetir el código. Ayudan a mantener los scripts largos ordenados y fáciles de leer.', codigo:'saludar(){\n  echo Hola\n}'},
+      {icon:'fa-clock', titulo:'Cron', texto:'Cron es el programador de tareas de Linux: permite ejecutar un script automáticamente en fechas u horas concretas, o de forma recurrente, sin que nadie tenga que iniciarlo manualmente. Es la herramienta estándar para respaldos automáticos, limpiezas periódicas y reportes programados.'}
+    ],
+    quiz:[
+      {p:'¿Con qué línea especial debe iniciar normalmente un script Bash?', o:['#!/bin/bash','<script>','#start','@bash'], r:0},
+      {p:'¿Qué palabra clave cierra un bucle "for" en Bash?', o:['end','fi','done','close'], r:2},
+      {p:'¿Qué símbolo se antepone al nombre de una variable para leer su valor?', o:['#','$','&','%'], r:1},
+      {p:'¿Qué herramienta de Linux permite programar tareas automáticas?', o:['grep','cron','chmod','top'], r:1}
+    ]
+  }
+};
+
+/* ============================================================
+   ESTILOS PARA LA VENTANA EMERGENTE DE CADA UNIDAD
+============================================================ */
+const ESTILO_POPUP = `
+:root{--bg:#170a18;--bg-panel:#220f24;--bg-panel-2:#2b1330;--aubergine:#3a1740;--orange:#E95420;--orange-dim:#b8431a;--green:#3EB489;--text:#f3ece8;--text-dim:#c3aec6;--text-faint:#8a7590;--code-bg:#100810;--border:#432248;--radius:14px;--display:'Space Grotesk',sans-serif;--body:'Inter',sans-serif;--mono:'JetBrains Mono',monospace;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:var(--body);line-height:1.6;padding-bottom:4rem;}
+header{position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:1rem;padding:1rem 2rem;background:rgba(23,10,24,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);}
+header .titulo-header{font-family:var(--display);font-size:1.1rem;display:flex;align-items:center;gap:.5rem;color:var(--text);}
+header .titulo-header i{color:var(--orange);}
+button{font-family:var(--body);cursor:pointer;border:none;border-radius:999px;padding:.65rem 1.4rem;background:var(--orange);color:#fff;font-weight:600;font-size:.9rem;transition:.15s;}
+button:hover{background:var(--orange-dim);}
+button.ghost{background:transparent;border:1px solid var(--border);color:var(--text);}
+button.ghost:hover{background:var(--bg-panel-2);}
+main{max-width:1200px;margin:0 auto;padding:2.4rem 2rem;}
+main > p.resumen{color:var(--text-dim);max-width:80ch;margin-bottom:2.2rem;font-size:1.02rem;}
+h1,h2,h3{font-family:var(--display);}
+code, .mono{font-family:var(--mono);}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.4rem;}
+.card{background:var(--bg-panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;display:flex;flex-direction:column;gap:.7rem;}
+.card .icon-wrap{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(233,84,32,.12);color:var(--orange);font-size:1.25rem;}
+.card h3{font-size:1.05rem;}
+.card p{color:var(--text-dim);font-size:.92rem;}
+.card ul{color:var(--text-dim);font-size:.9rem;padding-left:1.2rem;}
+.card ul li{margin-bottom:.2rem;}
+.codeline{display:block;background:var(--code-bg);color:var(--green);font-family:var(--mono);padding:.6rem .8rem;border-radius:8px;font-size:.85rem;overflow-x:auto;border:1px solid var(--border);white-space:pre;}
+table{width:100%;border-collapse:collapse;font-size:.88rem;}
+th,td{padding:.5rem .6rem;text-align:left;border-bottom:1px solid var(--border);color:var(--text-dim);}
+th{color:var(--text);font-family:var(--mono);font-size:.8rem;}
+.chip-row{display:flex;flex-wrap:wrap;gap:.5rem;}
+.chip{font-family:var(--mono);font-size:.78rem;padding:.35rem .7rem;border-radius:999px;background:var(--bg-panel-2);border:1px solid var(--border);color:var(--text-dim);}
+.card-actions{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:auto;}
+.card-actions button{padding:.5rem 1rem;font-size:.82rem;}
+.eval{max-width:640px;margin:3rem auto 0;background:var(--bg-panel);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;text-align:center;}
+.eval h2{display:flex;align-items:center;justify-content:center;gap:.5rem;margin-bottom:.4rem;}
+.eval h2 i{color:var(--orange);}
+.quiz-progreso{font-family:var(--mono);font-size:.8rem;color:var(--text-faint);margin-bottom:1rem;}
+#preg{font-size:1.15rem;margin-bottom:1.2rem;font-family:var(--display);}
+.quiz-opciones{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:1rem;}
+.quiz-opciones button{background:var(--bg-panel-2);border:1px solid var(--border);color:var(--text);}
+.quiz-opciones button.correcta{background:var(--green);border-color:var(--green);color:#0a1f16;}
+.quiz-opciones button.incorrecta{background:#c0392b;border-color:#c0392b;color:#fff;}
+.quiz-footer{color:var(--text-dim);font-size:.9rem;}
+@media(max-width:640px){.quiz-opciones{grid-template-columns:1fr;}}
+`;
+
+/* Construye el HTML de una tarjeta de tema para la ventana de la unidad */
+function tarjetaTema(t, n){
+  let html = '<div class="card"><div class="icon-wrap"><i class="fas '+t.icon+'"></i></div><h3>'+t.titulo+'</h3>';
+  if(t.texto) html += '<p>'+t.texto+'</p>';
+  if(t.lista) html += '<ul>'+t.lista.map(function(l){return '<li>'+l+'</li>';}).join('')+'</ul>';
+  if(t.chips) html += '<div class="chip-row">'+t.chips.map(function(c){return '<span class="chip">'+c+'</span>';}).join('')+'</div>';
+  if(t.tabla) html += '<table><tr>'+t.tabla.cab.map(function(c){return '<th>'+c+'</th>';}).join('')+'</tr>'+t.tabla.filas.map(function(f){return '<tr>'+f.map(function(c){return '<td>'+c+'</td>';}).join('')+'</tr>';}).join('')+'</table>';
+  if(t.codigo) html += '<pre class="codeline">'+t.codigo+'</pre><div class="card-actions"><button class="ghost" onclick="copiarCodigoPopup(this)" data-codigo="'+t.codigo.replace(/"/g,'&quot;')+'"><i class="fas fa-copy"></i>&nbsp; Copiar</button></div>';
+  if(t.ejemplo) html += '<code class="codeline">'+t.ejemplo+'</code><div class="card-actions"><button onclick="probarEnPrincipal(\''+t.ejemplo.replace(/'/g,"\\'")+'\')"><i class="fas fa-terminal"></i>&nbsp; Pruébalo</button></div>';
+  if(t.accion) html += '<div class="card-actions"><button onclick="'+t.accion+'">'+t.accionTexto+'</button></div>';
+  html += '</div>';
+  return html;
+}
+
+/* Construye la página completa de una unidad como string HTML */
+function paginaUnidad(n){
+  const u = UNIDADES[n];
+  const temasHTML = u.temas.map(function(t){ return tarjetaTema(t,n); }).join('');
+  const preguntasJSON = JSON.stringify(u.quiz);
+  let html = '<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">' +
+    '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
+    '<title>' + u.titulo + ' · Linux &amp; Bash</title>' +
+    '<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">' +
+    '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">' +
+    '<style>' + ESTILO_POPUP + '</style></head><body>' +
+    '<header><button class="ghost" onclick="regresar()"><i class="fas fa-arrow-left"></i>&nbsp; Regresar</button>' +
+    '<span class="titulo-header"><i class="' + u.icon + '"></i> ' + u.titulo + '</span></header>' +
+    '<main><p class="resumen">' + u.resumen + '</p>' +
+    '<div class="grid">' + temasHTML + '</div>' +
+    '<section class="eval"><h2><i class="fas fa-clipboard-check"></i> Evaluación de la Unidad</h2>' +
+    '<div class="quiz-progreso" id="qp">Pregunta 1 de ' + u.quiz.length + '</div>' +
+    '<div id="preg"></div><div class="quiz-opciones" id="opts"></div>' +
+    '<div class="quiz-footer">Puntaje: <strong id="pts">0</strong> / ' + u.quiz.length + '</div></section>' +
+    '</main>' +
+    '<script>' +
+      'var preguntas = ' + preguntasJSON + ';' +
+      'var idx = 0, pts = 0;' +
+      'function regresar(){ if(window.opener){ try{ window.opener.focus(); }catch(e){} } window.close(); }' +
+      'function copiarCodigoPopup(btn){ var t=btn.getAttribute("data-codigo"); navigator.clipboard.writeText(t).then(function(){ var o=btn.innerHTML; btn.innerHTML="<i class=\\"fas fa-check\\"></i>&nbsp; Copiado"; setTimeout(function(){btn.innerHTML=o;},1500); }); }' +
+      'function probarEnPrincipal(cmd){ if(window.opener && window.opener.Terminal){ window.opener.Terminal.probar(cmd); window.opener.focus(); } else { alert("Abre esta unidad desde la página principal para usar la terminal."); } }' +
+      'function mostrar(){' +
+        'if(idx>=preguntas.length){' +
+          'document.getElementById("preg").textContent="¡Evaluación completada! Obtuviste "+pts+" de "+preguntas.length+".";' +
+          'document.getElementById("opts").innerHTML="";' +
+          'document.getElementById("qp").textContent="Completado";' +
+          'return;' +
+        '}' +
+        'var q=preguntas[idx];' +
+        'document.getElementById("qp").textContent="Pregunta "+(idx+1)+" de "+preguntas.length;' +
+        'document.getElementById("preg").textContent=q.p;' +
+        'var h="";' +
+        'for(var i=0;i<q.o.length;i++){ h+=\'<button onclick="responder(\'+i+\')">\'+q.o[i]+\'</button>\'; }' +
+        'document.getElementById("opts").innerHTML=h;' +
+      '}' +
+      'function responder(i){' +
+        'var q=preguntas[idx];' +
+        'var btns=document.querySelectorAll(".quiz-opciones button");' +
+        'for(var j=0;j<btns.length;j++){ btns[j].disabled=true; }' +
+        'btns[q.r].classList.add("correcta");' +
+        'if(i===q.r){ pts++; } else { btns[i].classList.add("incorrecta"); }' +
+        'document.getElementById("pts").textContent=pts;' +
+        'setTimeout(function(){ idx++; mostrar(); }, 900);' +
+      '}' +
+      'mostrar();' +
+    '<' + '/script></body></html>';
+  return html;
+}
+
+/* Abre la ventana de una unidad */
+function abrirUnidad(n){
+  cerrarNav();
+  const w = window.open('', '_blank');
+  if(!w){ alert('Tu navegador bloqueó la ventana emergente. Permite las ventanas emergentes para esta página y vuelve a intentarlo.'); return; }
+  w.document.open();
+  w.document.write(paginaUnidad(n));
+  w.document.close();
+}
+
+/* Dato al azar de distribuciones (llamado también desde la ventana emergente vía window.opener) */
+function juegoDistribuciones(){
+  const datos=[
+    'Ubuntu está basada en Debian y es una de las distribuciones más usadas por principiantes.',
+    'Fedora es el laboratorio donde se prueban tecnologías que luego llegan a Red Hat Enterprise Linux.',
+    'Arch Linux sigue el modelo "rolling release": siempre tienes el software más reciente.',
+    'Kali Linux está enfocada en pruebas de seguridad y auditoría informática.',
+    'Debian es una de las distribuciones más antiguas y estables, base de muchas otras.',
+    'Linux Mint nació como una alternativa más amigable y lista para usar desde el primer momento.'
+  ];
+  alert('💡 '+datos[Math.floor(Math.random()*datos.length)]);
+}
+
+/* Pinta el resumen ("teaser") de cada unidad en la página principal */
+function renderTeaser(n){
+  const u = UNIDADES[n];
+  const chips = u.temas.map(function(t){ return t.titulo; }).map(function(x){ return '<span class="chip">'+x+'</span>'; }).join('');
+  document.getElementById('teaser'+n).innerHTML =
+    '<div class="icon-wrap-grande"><i class="'+u.icon+'"></i></div>' +
+    '<p>'+u.resumen+'</p>' +
+    '<div class="chip-row">'+chips+'</div>' +
+    '<button onclick="abrirUnidad('+n+')"><i class="fas fa-arrow-up-right-from-square"></i>&nbsp; Abrir unidad completa</button>';
+}
+renderTeaser(1); renderTeaser(2); renderTeaser(3); renderTeaser(4);
+
+/* ============================================================
+   HERO — TERMINAL ANIMADA
+============================================================ */
+(function(){
+  const el=document.getElementById('heroTyping');
+  const lineas=[
+    {p:'alumno@bash', path:'~', c:'whoami'},
+    {out:'alumno'},
+    {p:'alumno@bash', path:'~', c:'echo "listo para aprender Linux"'},
+    {out:'listo para aprender Linux'},
+  ];
+  let i=0;
+  function escribir(){
+    if(i>=lineas.length){ i=0; setTimeout(()=>{el.innerHTML='';escribir();},1400); return; }
+    const l=lineas[i];
+    const div=document.createElement('div');
+    div.className='linea';
+    if(l.c){
+      div.innerHTML=`<span class="prompt">${l.p}</span>:<span class="path">${l.path}</span>$ `;
+      el.appendChild(div);
+      let j=0;
+      const iv=setInterval(()=>{
+        div.innerHTML=`<span class="prompt">${l.p}</span>:<span class="path">${l.path}</span>$ ${l.c.slice(0,j)}<span class="cursor"></span>`;
+        j++;
+        if(j>l.c.length+1){clearInterval(iv); i++; setTimeout(escribir,350);}
+      },45);
+    } else {
+      div.textContent=l.out;
+      el.appendChild(div);
+      i++; setTimeout(escribir,500);
+    }
+  }
+  escribir();
+})();
+
+/* ============================================================
+   BARRA DE PROGRESO DE LECTURA + PROGRESO GLOBAL
+============================================================ */
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const pct=(h.scrollTop)/(h.scrollHeight-h.clientHeight)*100;
+  document.getElementById('progreso').style.width=pct+'%';
+});
+
+const seccionesProgreso=['unidad1','unidad2','unidad3','unidad4','juegos','terminal','quiz','certificado'];
+const visitadas=new Set();
+const barra=document.getElementById('barra');
+const obs=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{ if(e.isIntersecting) visitadas.add(e.target.id); });
+  const pct=Math.round((visitadas.size/seccionesProgreso.length)*100);
+  barra.style.width=pct+'%';
+  barra.textContent=pct+'%';
+},{threshold:0.35});
+seccionesProgreso.forEach(id=>{const s=document.getElementById(id); if(s) obs.observe(s);});
+
+/* ============================================================
+   ESTADÍSTICAS
+============================================================ */
+const stats=[
+  {icon:'fa-server', num:'90%+', txt:'de los servidores del mundo corren sobre Linux.'},
+  {icon:'fa-mobile-screen', num:'3.000M+', txt:'de dispositivos Android usan el kernel Linux.'},
+  {icon:'fa-rocket', num:'100%', txt:'de las supercomputadoras del top mundial usan Linux.'},
+  {icon:'fa-cloud', num:'Miles', txt:'de servidores de las grandes nubes corren Linux.'},
+  {icon:'fa-code-branch', num:'30+', txt:'años de desarrollo colaborativo y abierto desde 1991.'},
+  {icon:'fa-microchip', num:'Infinidad', txt:'de routers, TVs y dispositivos IoT lo usan por dentro.'},
+];
+document.getElementById('statGrid').innerHTML = stats.map(s=>`
+  <div class="stat-card"><i class="fas ${s.icon}"></i><h3>${s.num}</h3><p>${s.txt}</p></div>`).join('');
+
+const curiosidades=[
+  {icon:'fa-dove', txt:'Linux domina más del 90% de los servidores del mundo.'},
+  {icon:'fa-mobile', txt:'Android utiliza el kernel Linux por dentro.'},
+  {icon:'fa-satellite', txt:'La NASA utiliza Linux en varios de sus sistemas.'},
+  {icon:'fa-globe', txt:'Google opera miles de servidores Linux.'},
+  {icon:'fa-code-fork', txt:'GitHub apoya gran parte de su infraestructura en Linux.'},
+  {icon:'fa-microchip', txt:'Casi todas las supercomputadoras del planeta usan Linux.'},
+];
+document.getElementById('curioGrid').innerHTML = curiosidades.map(c=>`
+  <div class="curio-card"><i class="fas ${c.icon}"></i><span>${c.txt}</span></div>`).join('');
+
+/* ============================================================
+   JUEGO 1 — MEMORAMA
+============================================================ */
+const Memorama = (()=>{
+  const pares=[
+    ['pwd','Muestra la ruta actual'],
+    ['ls','Lista archivos'],
+    ['cd','Cambia de carpeta'],
+    ['rm','Elimina archivos'],
+    ['cp','Copia archivos'],
+    ['grep','Busca texto'],
+  ];
+  let cartas=[], volteadas=[], bloqueado=false, aciertos=0;
+
+  function iniciar(){
+    cartas = pares.flatMap(([a,b],idx)=>[{id:idx,label:a},{id:idx,label:b}]);
+    cartas.sort(()=>Math.random()-.5);
+    volteadas=[]; bloqueado=false; aciertos=0;
+    document.getElementById('memoEstado').textContent='Encuentra la pareja entre comando y función.';
+    render();
+  }
+  function render(){
+    const grid=document.getElementById('memoGrid');
+    grid.innerHTML = cartas.map((c,i)=>`<div class="memo-card" data-i="${i}" onclick="Memorama.click(${i})">${c.label}</div>`).join('');
+  }
+  function click(i){
+    if(bloqueado) return;
+    const el=document.querySelectorAll('.memo-card')[i];
+    if(el.classList.contains('match')||el.classList.contains('volteada')) return;
+    el.classList.add('volteada');
+    volteadas.push(i);
+    if(volteadas.length===2){
+      bloqueado=true;
+      const [a,b]=volteadas;
+      const els=document.querySelectorAll('.memo-card');
+      if(cartas[a].id===cartas[b].id){
+        els[a].classList.add('match'); els[b].classList.add('match');
+        volteadas=[]; bloqueado=false; aciertos++;
+        if(aciertos===pares.length) document.getElementById('memoEstado').textContent='¡Completado! Encontraste todas las parejas 🎉';
+      } else {
+        setTimeout(()=>{
+          els[a].classList.remove('volteada'); els[b].classList.remove('volteada');
+          volteadas=[]; bloqueado=false;
+        },700);
+      }
+    }
+  }
+  return {iniciar, click};
+})();
+Memorama.iniciar();
+
+/* ============================================================
+   JUEGO 2 — RULETA BASH
+============================================================ */
+const Ruleta = (()=>{
+  const comandos=[
+    {c:'ls', d:'Lista el contenido de un directorio.'},
+    {c:'cd', d:'Cambia de directorio de trabajo.'},
+    {c:'pwd', d:'Muestra la ruta actual.'},
+    {c:'grep', d:'Busca texto dentro de archivos.'},
+    {c:'chmod', d:'Modifica permisos de archivos.'},
+    {c:'ps', d:'Lista procesos en ejecución.'},
+    {c:'mkdir', d:'Crea un nuevo directorio.'},
+    {c:'kill', d:'Termina un proceso.'},
+  ];
+  const colores=['#E95420','#3EB489','#3a1740','#b8431a','#2b1330','#28c840','#c0392b','#febc2e'];
+  const rueda=document.getElementById('rueda');
+  let anguloActual=0;
+  function pintar(){
+    const paso=360/comandos.length;
+    const gradiente=comandos.map((c,i)=>`${colores[i%colores.length]} ${i*paso}deg ${(i+1)*paso}deg`).join(',');
+    rueda.style.background=`conic-gradient(${gradiente})`;
+  }
+  pintar();
+  function girar(){
+    const paso=360/comandos.length;
+    const vueltas=5;
+    const extra=Math.floor(Math.random()*comandos.length);
+    const destino=vueltas*360 + extra*paso + paso/2;
+    anguloActual += destino;
+    rueda.style.transform=`rotate(${anguloActual}deg)`;
+    setTimeout(()=>{
+      const normalizado=(360 - (anguloActual%360))%360;
+      const idx=Math.floor(normalizado/paso)%comandos.length;
+      const sel=comandos[idx];
+      document.getElementById('ruletaCard').innerHTML=`<code style="font-size:1.2rem;color:var(--orange);">${sel.c}</code><p style="margin-top:.5rem;color:var(--text-dim);">${sel.d}</p>`;
+    },4100);
+  }
+  return {girar};
+})();
+
+/* ============================================================
+   JUEGO 3 — AHORCADO
+============================================================ */
+const Ahorcado = (()=>{
+  const banco=[
+    {p:'GREP', pista:'Busca texto dentro de archivos.'},
+    {p:'CHMOD', pista:'Modifica permisos.'},
+    {p:'MKDIR', pista:'Crea una carpeta.'},
+    {p:'PWD', pista:'Muestra el directorio actual.'},
+    {p:'KILL', pista:'Termina un proceso.'},
+    {p:'TOUCH', pista:'Crea un archivo vacío.'},
+    {p:'WHOAMI', pista:'Muestra el usuario activo.'},
+  ];
+  let palabra, adivinadas, errores, terminado;
+  const maxErrores=6;
+  const partes=[
+    '<circle cx="80" cy="36" r="10" stroke="#c3aec6" stroke-width="3" fill="none"/>',
+    '<line x1="80" y1="46" x2="80" y2="80" stroke="#c3aec6" stroke-width="3"/>',
+    '<line x1="80" y1="55" x2="60" y2="70" stroke="#c3aec6" stroke-width="3"/>',
+    '<line x1="80" y1="55" x2="100" y2="70" stroke="#c3aec6" stroke-width="3"/>',
+    '<line x1="80" y1="80" x2="62" y2="105" stroke="#c3aec6" stroke-width="3"/>',
+    '<line x1="80" y1="80" x2="98" y2="105" stroke="#c3aec6" stroke-width="3"/>',
+  ];
+  function iniciar(){
+    const sel=banco[Math.floor(Math.random()*banco.length)];
+    palabra=sel.p; adivinadas=new Set(); errores=0; terminado=false;
+    document.getElementById('ahorcadoEstado').textContent='Pista: '+sel.pista;
+    document.getElementById('hangParts').innerHTML='';
+    renderPalabra(); renderTeclado();
+  }
+  function renderPalabra(){
+    document.getElementById('palabraOculta').textContent = palabra.split('').map(l=>adivinadas.has(l)?l:'_').join(' ');
+  }
+  function renderTeclado(){
+    const letras='ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+    document.getElementById('teclado').innerHTML = letras.map(l=>`<button class="tecla" id="k_${l}" onclick="Ahorcado.intentar('${l}')">${l}</button>`).join('');
+  }
+  function intentar(l){
+    if(terminado) return;
+    const btn=document.getElementById('k_'+l);
+    btn.disabled=true;
+    if(palabra.includes(l)){
+      adivinadas.add(l); btn.classList.add('correcta');
+      renderPalabra();
+      if(palabra.split('').every(c=>adivinadas.has(c))){
+        terminado=true;
+        document.getElementById('ahorcadoEstado').textContent='¡Correcto! La palabra era '+palabra+' 🎉';
+      }
+    } else {
+      btn.classList.add('incorrecta');
+      document.getElementById('hangParts').innerHTML += partes[errores];
+      errores++;
+      if(errores>=maxErrores){
+        terminado=true;
+        document.getElementById('palabraOculta').textContent=palabra;
+        document.getElementById('ahorcadoEstado').textContent='Sin intentos. La palabra era '+palabra+'.';
+        document.querySelectorAll('.tecla').forEach(b=>b.disabled=true);
+      }
+    }
+  }
+  return {iniciar, intentar};
+})();
+Ahorcado.iniciar();
+
+/* ============================================================
+   JUEGO 4 — DRAG & DROP
+============================================================ */
+const DragDrop = (()=>{
+  const paresBase=[
+    {c:'ls', f:'Lista archivos y carpetas'},
+    {c:'cd', f:'Cambia de directorio'},
+    {c:'rm', f:'Elimina un archivo'},
+    {c:'cp', f:'Copia un archivo'},
+    {c:'mv', f:'Mueve o renombra'},
+  ];
+  function iniciar(){
+    const items=[...paresBase].sort(()=>Math.random()-.5);
+    const drops=[...paresBase].sort(()=>Math.random()-.5);
+    document.getElementById('dndItems').innerHTML = items.map(p=>
+      `<div class="dnd-item" draggable="true" data-c="${p.c}" ondragstart="DragDrop.arrastrar(event)">${p.c}</div>`).join('');
+    document.getElementById('dndDrops').innerHTML = drops.map(p=>
+      `<div class="dnd-drop" data-c="${p.c}" ondragover="DragDrop.sobre(event)" ondragleave="DragDrop.fuera(event)" ondrop="DragDrop.soltar(event)">${p.f}</div>`).join('');
+    document.getElementById('dndEstado').textContent='Arrastra cada comando hasta su función correcta.';
+  }
+  let arrastrando=null;
+  function arrastrar(e){ arrastrando=e.target.dataset.c; e.dataTransfer.setData('text',arrastrando); }
+  function sobre(e){ e.preventDefault(); e.target.classList.add('over'); }
+  function fuera(e){ e.target.classList.remove('over'); }
+  function soltar(e){
+    e.preventDefault();
+    const drop=e.target.closest('.dnd-drop');
+    drop.classList.remove('over');
+    if(!drop || drop.classList.contains('ok')) return;
+    const correcto = drop.dataset.c === arrastrando;
+    drop.classList.add(correcto?'ok':'bad');
+    drop.innerHTML += ` <span class="mono" style="font-size:.75rem;">(${arrastrando})</span>`;
+    if(correcto){
+      const items=document.querySelectorAll('.dnd-item');
+      items.forEach(it=>{ if(it.dataset.c===arrastrando) it.remove(); });
+    } else {
+      setTimeout(()=>{ drop.classList.remove('bad'); drop.innerHTML = drop.innerHTML.replace(/ <span.*<\/span>/,''); },700);
+    }
+    const restantes=document.querySelectorAll('.dnd-item').length;
+    if(restantes===0) document.getElementById('dndEstado').textContent='¡Completado! Todas las coincidencias son correctas 🎉';
+  }
+  return {iniciar, arrastrar, sobre, fuera, soltar};
+})();
+DragDrop.iniciar();
+
+/* ============================================================
+   JUEGO 5 — PUZZLE DESLIZANTE
+============================================================ */
+const Puzzle = (()=>{
+  let orden=[1,2,3,4,5,6,7,8,0]; // 0 = vacío
+  function iniciar(){
+    orden=[1,2,3,4,5,6,7,8,0];
+    for(let i=0;i<120;i++){
+      const vacio=orden.indexOf(0);
+      const vecinos=vecinosDe(vacio);
+      const v=vecinos[Math.floor(Math.random()*vecinos.length)];
+      [orden[vacio],orden[v]]=[orden[v],orden[vacio]];
+    }
+    document.getElementById('puzzleEstado').textContent='Ordena las fichas del 1 al 8.';
+    render();
+  }
+  function vecinosDe(pos){
+    const fila=Math.floor(pos/3), col=pos%3, res=[];
+    if(fila>0) res.push(pos-3);
+    if(fila<2) res.push(pos+3);
+    if(col>0) res.push(pos-1);
+    if(col<2) res.push(pos+1);
+    return res;
+  }
+  function render(){
+    document.getElementById('puzzleGrid').innerHTML = orden.map((n,i)=>
+      n===0 ? `<div class="puzzle-tile vacio"></div>` : `<div class="puzzle-tile" onclick="Puzzle.mover(${i})">${n}</div>`).join('');
+  }
+  function mover(pos){
+    const vacio=orden.indexOf(0);
+    if(vecinosDe(pos).includes(vacio)){
+      [orden[pos],orden[vacio]]=[orden[vacio],orden[pos]];
+      render();
+      if(orden.slice(0,8).every((n,i)=>n===i+1)){
+        document.getElementById('puzzleEstado').textContent='¡Resuelto! 🎉';
+      }
+    }
+  }
+  return {iniciar, mover};
+})();
+Puzzle.iniciar();
+
+/* ============================================================
+   JUEGO 6 — FLASHCARDS
+============================================================ */
+const Flash = (()=>{
+  let mazo = UNIDADES[2].temas.map(t=>({front:t.titulo, back:t.texto}));
+  let i=0;
+  function render(){
+    document.getElementById('flashcard').classList.remove('flip');
+    document.getElementById('flashFront').textContent = mazo[i].front;
+    document.getElementById('flashBack').textContent = mazo[i].back;
+    document.getElementById('flashContador').textContent = (i+1)+' / '+mazo.length;
+  }
+  function voltear(){ document.getElementById('flashcard').classList.toggle('flip'); }
+  function siguiente(){ i=(i+1)%mazo.length; render(); }
+  function anterior(){ i=(i-1+mazo.length)%mazo.length; render(); }
+  function mezclar(){ mazo.sort(()=>Math.random()-.5); i=0; render(); }
+  render();
+  return {voltear, siguiente, anterior, mezclar};
+})();
+
+/* ============================================================
+   TERMINAL SIMULADA
+============================================================ */
+const Terminal = (()=>{
+  let fs = {'~':{}};
+  let cwd = ['~'];
+  let historial=[], histIdx=-1;
+  const pantalla=document.getElementById('pantalla');
+
+  function nodoActual(){
+    let n=fs['~'];
+    for(let i=1;i<cwd.length;i++) n=n[cwd[i]];
+    return n;
+  }
+  function linea(texto, clase=''){
+    const d=document.createElement('div');
+    d.className='linea '+clase;
+    d.textContent=texto;
+    pantalla.appendChild(d);
+    pantalla.scrollTop=pantalla.scrollHeight;
+  }
+  function prompt(cmdTexto){
+    linea('alumno@bash:'+cwd.join('/').replace('~','~')+'$ '+cmdTexto);
+  }
+  function ejecutar(){
+    const input=document.getElementById('comando');
+    const texto=input.value.trim();
+    if(!texto) return;
+    historial.push(texto); histIdx=historial.length;
+    prompt(texto);
+    procesar(texto);
+    input.value='';
+  }
+  function tecla(e){
+    if(e.key==='Enter') ejecutar();
+    else if(e.key==='ArrowUp'){ if(histIdx>0){histIdx--; e.target.value=historial[histIdx];} e.preventDefault(); }
+    else if(e.key==='ArrowDown'){ if(histIdx<historial.length-1){histIdx++; e.target.value=historial[histIdx];} else {histIdx=historial.length; e.target.value='';} e.preventDefault(); }
+  }
+  function probar(cmd){
+    document.getElementById('terminal').scrollIntoView({behavior:'smooth'});
+    document.getElementById('comando').value=cmd;
+    setTimeout(()=>document.getElementById('comando').focus(),500);
+  }
+
+  function procesar(texto){
+    const partes=texto.split(' ').filter(Boolean);
+    const cmd=partes[0];
+    const args=partes.slice(1);
+    const nodo=nodoActual();
+    switch(cmd){
+      case 'help':
+        linea('Comandos disponibles: pwd, ls, cd, mkdir, touch, rm, cp, mv, cat, echo, whoami, hostname, clear, history, date, ps, df, du, uname, chmod, chown, kill','out');
+        break;
+      case 'pwd':
+        linea(cwd.join('/').replace('~/','/home/alumno/').replace('~','/home/alumno'), 'out');
+        break;
+      case 'ls':
+        linea(Object.keys(nodo).join('  ') || '(carpeta vacía)', 'out');
+        break;
+      case 'cd':
+        if(!args[0] || args[0]==='~'){ cwd=['~']; }
+        else if(args[0]==='..'){ if(cwd.length>1) cwd.pop(); }
+        else if(nodo[args[0]]!==undefined && typeof nodo[args[0]]==='object'){ cwd.push(args[0]); }
+        else linea('bash: cd: '+args[0]+': No existe el directorio','err');
+        break;
+      case 'mkdir':
+        if(!args[0]) linea('mkdir: falta un operando','err');
+        else { nodo[args[0]]={}; linea('Directorio creado: '+args[0],'ok'); }
+        break;
+      case 'touch':
+        if(!args[0]) linea('touch: falta un operando','err');
+        else { nodo[args[0]]=nodo[args[0]] && typeof nodo[args[0]]==='string' ? nodo[args[0]] : ''; linea('Archivo creado: '+args[0],'ok'); }
+        break;
+      case 'rm':
+        if(!args[0]) linea('rm: falta un operando','err');
+        else if(nodo[args[0]]!==undefined){ delete nodo[args[0]]; linea('Eliminado: '+args[0],'ok'); }
+        else linea('rm: no se puede eliminar '+args[0]+': no existe','err');
+        break;
+      case 'cp':
+        if(args.length<2) linea('cp: se requieren origen y destino','err');
+        else if(nodo[args[0]]!==undefined){ nodo[args[1]]=nodo[args[0]]; linea(args[0]+' copiado a '+args[1],'ok'); }
+        else linea('cp: no existe '+args[0],'err');
+        break;
+      case 'mv':
+        if(args.length<2) linea('mv: se requieren origen y destino','err');
+        else if(nodo[args[0]]!==undefined){ nodo[args[1]]=nodo[args[0]]; delete nodo[args[0]]; linea(args[0]+' movido a '+args[1],'ok'); }
+        else linea('mv: no existe '+args[0],'err');
+        break;
+      case 'cat':
+        if(!args[0]) linea('cat: falta un operando','err');
+        else if(typeof nodo[args[0]]==='string') linea(nodo[args[0]]||'(archivo vacío)','out');
+        else linea('cat: '+args[0]+': no existe o es un directorio','err');
+        break;
+      case 'echo':
+        if(texto.includes('>')){
+          const [contenido,archivo]=texto.replace('echo','').split('>').map(s=>s.trim());
+          nodo[archivo]=contenido.replace(/^"|"$/g,'');
+          linea('Escrito en '+archivo,'ok');
+        } else {
+          linea(args.join(' '),'out');
+        }
+        break;
+      case 'whoami': linea('alumno','out'); break;
+      case 'hostname': linea('linux-bash-lab','out'); break;
+      case 'date': linea(new Date().toString(),'out'); break;
+      case 'uname': linea('Linux linux-bash-lab 6.8.0 x86_64 GNU/Linux','out'); break;
+      case 'ps': linea('  PID TTY          TIME CMD\n 1234 pts/0    00:00:00 bash','out'); break;
+      case 'df': linea('Filesystem  Size  Used  Avail  Use%\n/dev/sda1    50G   18G    30G   38%  /','out'); break;
+      case 'du': linea('4.0K\t.','out'); break;
+      case 'chmod': linea('Permisos actualizados para '+(args[1]||args[0]||'archivo'),'ok'); break;
+      case 'chown': linea('Propietario actualizado','ok'); break;
+      case 'kill': linea('Proceso '+(args[0]||'')+' finalizado','ok'); break;
+      case 'history':
+        historial.forEach((h,i)=>linea((i+1)+'  '+h,'out'));
+        break;
+      case 'clear':
+        pantalla.innerHTML=''; break;
+      default:
+        linea('bash: '+cmd+': comando no encontrado. Escribe "help" para ver la lista.','err');
+    }
+  }
+
+  linea('Bienvenido a Bash — escribe "help" para ver los comandos disponibles.');
+  return {ejecutar, tecla, probar};
+})();
+
+/* ============================================================
+   QUIZ GENERAL (evaluación final acumulativa)
+============================================================ */
+const Quiz = (()=>{
+  const preguntas=[
+    {p:'¿Qué comando muestra el directorio actual?', o:['pwd','mkdir','cp','kill'], r:0},
+    {p:'¿Qué comando lista el contenido de una carpeta?', o:['cat','ls','rm','mv'], r:1},
+    {p:'¿Qué comando crea una carpeta nueva?', o:['touch','rm','mkdir','cd'], r:2},
+    {p:'¿Qué comando cambia los permisos de un archivo?', o:['chown','chmod','kill','ps'], r:1},
+    {p:'¿Qué significa Bash?', o:['Basic Shell','Bourne Again Shell','Binary Shell','Basic Access Shell'], r:1},
+    {p:'¿Qué comando muestra el usuario activo?', o:['whoami','hostname','uname','who'], r:0},
+    {p:'¿Qué comando busca texto dentro de archivos?', o:['find','grep','ls','cat'], r:1},
+    {p:'¿Qué operador redirige la salida a un archivo, sobrescribiéndolo?', o:['|','<','>','&&'], r:2},
+  ];
+  let orden=[...preguntas.keys()], idx=0, puntos=0;
+  function reiniciar(){
+    orden=[...preguntas.keys()].sort(()=>Math.random()-.5);
+    idx=0; puntos=0;
+    document.getElementById('puntos').textContent=0;
+    mostrar();
+  }
+  function mostrar(){
+    if(idx>=orden.length){
+      document.getElementById('pregunta').textContent='¡Evaluación general terminada! Obtuviste '+puntos+' de '+preguntas.length+' 🎉';
+      document.getElementById('quizOpciones').innerHTML='';
+      document.getElementById('quizProgreso').textContent='Completado';
+      return;
+    }
+    const q=preguntas[orden[idx]];
+    document.getElementById('quizProgreso').textContent=`Pregunta ${idx+1} de ${preguntas.length}`;
+    document.getElementById('pregunta').textContent=q.p;
+    document.getElementById('quizOpciones').innerHTML = q.o.map((op,i)=>
+      `<button onclick="Quiz.responder(${i})">${op}</button>`).join('');
+  }
+  function responder(i){
+    const q=preguntas[orden[idx]];
+    const botones=document.querySelectorAll('.quiz-opciones button');
+    botones.forEach(b=>b.disabled=true);
+    botones[q.r].classList.add('correcta');
+    if(i===q.r) puntos++; else botones[i].classList.add('incorrecta');
+    document.getElementById('puntos').textContent=puntos;
+    setTimeout(()=>{ idx++; mostrar(); }, 900);
+  }
+  reiniciar();
+  return {reiniciar, responder};
+})();
+
+/* ============================================================
+   CERTIFICADO
+============================================================ */
+function certificado(){
+  const nombre=document.getElementById('nombreAlumno').value.trim();
+  const certNombre=document.getElementById('certNombre');
+  const certFecha=document.getElementById('certFecha');
+  if(!nombre){
+    certNombre.textContent='';
+    certFecha.textContent='';
+    document.getElementById('nombreAlumno').placeholder='Escribe tu nombre para generar el certificado';
+    return;
+  }
+  const fecha=new Date().toLocaleDateString('es-EC',{year:'numeric',month:'long',day:'numeric'});
+  certNombre.textContent=nombre;
+  certFecha.textContent='Completado el '+fecha;
+  document.querySelector('.certificado-marco').scrollIntoView({behavior:'smooth', block:'center'});
+}
+</script>
+</body>
+</html>
   --green:#3EB489;
   --text:#f3ece8;
   --text-dim:#c3aec6;
