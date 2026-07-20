@@ -300,7 +300,9 @@ th{color:var(--text);font-family:var(--mono);font-size:.8rem;}
 .cert-nombre{font-family:'Great Vibes',cursive;font-size:3.1rem;color:#5c3d10;min-height:4rem;line-height:1.3;}
 .cert-linea{width:55%;height:1px;background:#c9a227;margin:.2rem auto 1.5rem;}
 .cert-desc{color:#6b5b3e;font-size:.92rem;max-width:58ch;margin:0 auto 1rem;line-height:1.7;}
-.cert-fecha{color:#8a7550;font-family:var(--mono);font-size:.8rem;margin-bottom:2rem;min-height:1.1em;}
+.cert-fecha{color:#8a7550;font-family:var(--mono);font-size:.8rem;margin-bottom:.6rem;min-height:1.1em;}
+.cert-puntaje{color:#5c3d10;font-family:var(--mono);font-size:.85rem;font-weight:700;margin-bottom:2rem;min-height:1.1em;}
+.cert-puntaje .falta{color:#8a7550;font-weight:500;display:block;font-size:.75rem;margin-top:.3rem;}
 .cert-firmas{display:flex;align-items:flex-end;justify-content:center;gap:2.6rem;flex-wrap:wrap;}
 .firma-col{display:flex;flex-direction:column;align-items:center;gap:.5rem;color:#6b5b3e;font-size:.85rem;}
 .firma-linea{width:130px;height:1px;background:#7a6a4a;}
@@ -582,6 +584,7 @@ footer{background:var(--bg-panel);border-top:1px solid var(--border);padding:3re
       <div class="cert-linea"></div>
       <p class="cert-desc">En reconocimiento por su dedicación y compromiso al completar el curso interactivo <strong>Linux &amp; Bash</strong>, demostrando conocimientos en administración de sistemas, comandos de terminal y automatización mediante scripts.</p>
       <div class="cert-fecha" id="certFecha"></div>
+      <div class="cert-puntaje" id="certPuntaje"></div>
       <div class="cert-firmas">
         <div class="sello-dorado"></div>
       </div>
@@ -862,6 +865,7 @@ function paginaUnidad(n){
     '</main>' +
     '<script>' +
       'var preguntas = ' + preguntasJSON + ';' +
+      'var unidadNum = ' + n + ';' +
       'var idx = 0, pts = 0;' +
       'function regresar(){ if(window.opener){ try{ window.opener.focus(); }catch(e){} } window.close(); }' +
       'function copiarCodigoPopup(btn){ var t=btn.getAttribute("data-codigo"); navigator.clipboard.writeText(t).then(function(){ var o=btn.innerHTML; btn.innerHTML="<i class=\\"fas fa-check\\"></i>&nbsp; Copiado"; setTimeout(function(){btn.innerHTML=o;},1500); }); }' +
@@ -871,6 +875,7 @@ function paginaUnidad(n){
           'document.getElementById("preg").textContent="¡Evaluación completada! Obtuviste "+pts+" de "+preguntas.length+".";' +
           'document.getElementById("opts").innerHTML="";' +
           'document.getElementById("qp").textContent="Completado";' +
+          'if(window.opener && window.opener.registrarPuntajeUnidad){ window.opener.registrarPuntajeUnidad(unidadNum, pts, preguntas.length); }' +
           'return;' +
         '}' +
         'var q=preguntas[idx];' +
@@ -1008,6 +1013,26 @@ const curiosidades=[
 ];
 document.getElementById('curioGrid').innerHTML = curiosidades.map(c=>`
   <div class="curio-card"><i class="fas ${c.icon}"></i><span>${c.txt}</span></div>`).join('');
+
+/* ============================================================
+   PUNTAJES — evaluaciones de las 4 unidades + evaluación final
+============================================================ */
+const Puntajes = {
+  unidades:{1:null,2:null,3:null,4:null},
+  general:null
+};
+function registrarPuntajeUnidad(n, pts, total){
+  Puntajes.unidades[n] = {pts:pts, total:total};
+}
+function calcularPuntajeFinal(){
+  let sumaPts=0, sumaTotal=0, faltantes=[];
+  for(let n=1;n<=4;n++){
+    const u=Puntajes.unidades[n];
+    if(u){ sumaPts+=u.pts; sumaTotal+=u.total; } else faltantes.push('Unidad '+n);
+  }
+  if(Puntajes.general){ sumaPts+=Puntajes.general.pts; sumaTotal+=Puntajes.general.total; } else faltantes.push('Evaluación final');
+  return {sumaPts, sumaTotal, faltantes};
+}
 
 /* ============================================================
    JUEGO 1 — MEMORAMA
@@ -1423,6 +1448,7 @@ const Quiz = (()=>{
       document.getElementById('pregunta').textContent='¡Evaluación general terminada! Obtuviste '+puntos+' de '+preguntas.length+' 🎉';
       document.getElementById('quizOpciones').innerHTML='';
       document.getElementById('quizProgreso').textContent='Completado';
+      Puntajes.general = {pts:puntos, total:preguntas.length};
       return;
     }
     const q=preguntas[orden[idx]];
@@ -1451,15 +1477,30 @@ function certificado(){
   const nombre=document.getElementById('nombreAlumno').value.trim();
   const certNombre=document.getElementById('certNombre');
   const certFecha=document.getElementById('certFecha');
+  const certPuntaje=document.getElementById('certPuntaje');
   if(!nombre){
     certNombre.textContent='';
     certFecha.textContent='';
+    certPuntaje.innerHTML='';
     document.getElementById('nombreAlumno').placeholder='Escribe tu nombre para generar el certificado';
     return;
   }
   const fecha=new Date().toLocaleDateString('es-EC',{year:'numeric',month:'long',day:'numeric'});
   certNombre.textContent=nombre;
   certFecha.textContent='Completado el '+fecha;
+
+  const {sumaPts, sumaTotal, faltantes} = calcularPuntajeFinal();
+  if(sumaTotal>0){
+    const pct=Math.round((sumaPts/sumaTotal)*100);
+    let html='Puntaje final: '+sumaPts+' / '+sumaTotal+' ('+pct+'%)';
+    if(faltantes.length>0){
+      html += '<span class="falta">Pendiente de completar: '+faltantes.join(', ')+'</span>';
+    }
+    certPuntaje.innerHTML=html;
+  } else {
+    certPuntaje.innerHTML='<span class="falta">Completa las evaluaciones de las unidades y la evaluación final para ver tu puntaje.</span>';
+  }
+
   document.querySelector('.certificado-marco').scrollIntoView({behavior:'smooth', block:'center'});
 }
 </script>
