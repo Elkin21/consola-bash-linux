@@ -826,6 +826,8 @@ th{color:var(--text);font-family:var(--mono);font-size:.8rem;}
 .quiz-opciones button.correcta{background:var(--green);border-color:var(--green);color:#0a1f16;}
 .quiz-opciones button.incorrecta{background:#c0392b;border-color:#c0392b;color:#fff;}
 .quiz-footer{color:var(--text-dim);font-size:.9rem;}
+.aviso-envio{max-width:640px;margin:1rem auto 0;background:rgba(62,180,137,.12);border:1px solid var(--green);color:var(--green);border-radius:10px;padding:.8rem 1rem;font-size:.85rem;text-align:center;display:none;}
+.aviso-envio.mostrar{display:block;}
 @media(max-width:640px){.quiz-opciones{grid-template-columns:1fr;}}
 `;
 
@@ -858,6 +860,7 @@ function paginaUnidad(n){
     '<span class="titulo-header"><i class="' + u.icon + '"></i> ' + u.titulo + '</span></header>' +
     '<main><p class="resumen">' + u.resumen + '</p>' +
     '<div class="grid">' + temasHTML + '</div>' +
+    '<div class="aviso-envio" id="avisoEnvio"></div>' +
     '<section class="eval"><h2><i class="fas fa-clipboard-check"></i> Evaluación de la Unidad</h2>' +
     '<div class="quiz-progreso" id="qp">Pregunta 1 de ' + u.quiz.length + '</div>' +
     '<div id="preg"></div><div class="quiz-opciones" id="opts"></div>' +
@@ -867,15 +870,38 @@ function paginaUnidad(n){
       'var preguntas = ' + preguntasJSON + ';' +
       'var unidadNum = ' + n + ';' +
       'var idx = 0, pts = 0;' +
+      'var CANAL_TERMINAL = "__lb_comando_terminal__";' +
+      'var CANAL_PUNTAJE = "__lb_puntaje_unidad__";' +
+      'var CANAL_DATO = "__lb_dato_distribuciones__";' +
       'function regresar(){ if(window.opener){ try{ window.opener.focus(); }catch(e){} } window.close(); }' +
       'function copiarCodigoPopup(btn){ var t=btn.getAttribute("data-codigo"); navigator.clipboard.writeText(t).then(function(){ var o=btn.innerHTML; btn.innerHTML="<i class=\\"fas fa-check\\"></i>&nbsp; Copiado"; setTimeout(function(){btn.innerHTML=o;},1500); }); }' +
-      'function probarEnPrincipal(cmd){ if(window.opener && window.opener.Terminal){ window.opener.Terminal.probar(cmd); window.opener.focus(); } else { alert("Abre esta unidad desde la página principal para usar la terminal."); } }' +
+      'function mostrarAviso(msg){ var a=document.getElementById("avisoEnvio"); a.textContent=msg; a.classList.add("mostrar"); a.scrollIntoView({behavior:"smooth", block:"center"}); setTimeout(function(){ a.classList.remove("mostrar"); }, 4000); }' +
+      'function probarEnPrincipal(cmd){' +
+        'var enviadoDirecto = false;' +
+        'try{ if(window.opener && !window.opener.closed && window.opener.Terminal){ window.opener.Terminal.probar(cmd); window.opener.focus(); enviadoDirecto = true; } }catch(e){}' +
+        'if(!enviadoDirecto){' +
+          'try{ localStorage.setItem(CANAL_TERMINAL, JSON.stringify({cmd:cmd, ts:Date.now()})); }catch(e){}' +
+          'mostrarAviso("Comando enviado. Cambia a la pestaña principal \\u2013 se ejecutar\\u00e1 solo en la terminal.");' +
+        '}' +
+      '}' +
+      'function juegoDistribuciones(){' +
+        'var enviadoDirecto = false;' +
+        'try{ if(window.opener && !window.opener.closed && window.opener.juegoDistribuciones){ window.opener.juegoDistribuciones(); window.opener.focus(); enviadoDirecto = true; } }catch(e){}' +
+        'if(!enviadoDirecto){' +
+          'try{ localStorage.setItem(CANAL_DATO, JSON.stringify({ts:Date.now()})); }catch(e){}' +
+          'mostrarAviso("Cambia a la pesta\\u00f1a principal para ver el dato al azar.");' +
+        '}' +
+      '}' +
       'function mostrar(){' +
         'if(idx>=preguntas.length){' +
           'document.getElementById("preg").textContent="¡Evaluación completada! Obtuviste "+pts+" de "+preguntas.length+".";' +
           'document.getElementById("opts").innerHTML="";' +
           'document.getElementById("qp").textContent="Completado";' +
-          'if(window.opener && window.opener.registrarPuntajeUnidad){ window.opener.registrarPuntajeUnidad(unidadNum, pts, preguntas.length); }' +
+          'var enviadoDirecto = false;' +
+          'try{ if(window.opener && !window.opener.closed && window.opener.registrarPuntajeUnidad){ window.opener.registrarPuntajeUnidad(unidadNum, pts, preguntas.length); enviadoDirecto = true; } }catch(e){}' +
+          'if(!enviadoDirecto){' +
+            'try{ localStorage.setItem(CANAL_PUNTAJE, JSON.stringify({unidad:unidadNum, pts:pts, total:preguntas.length, ts:Date.now()})); }catch(e){}' +
+          '}' +
           'return;' +
         '}' +
         'var q=preguntas[idx];' +
@@ -909,7 +935,8 @@ function abrirUnidad(n){
   w.document.close();
 }
 
-/* Dato al azar de distribuciones (llamado también desde la ventana emergente vía window.opener) */
+/* Dato al azar de distribuciones (llamado también desde la ventana emergente vía window.opener,
+   o vía el canal de localStorage si el navegador aísla la ventana emergente, p. ej. GitHub Pages) */
 function juegoDistribuciones(){
   const datos=[
     'Ubuntu está basada en Debian y es una de las distribuciones más usadas por principiantes.',
@@ -921,6 +948,33 @@ function juegoDistribuciones(){
   ];
   alert('💡 '+datos[Math.floor(Math.random()*datos.length)]);
 }
+
+/* ============================================================
+   PUENTE DE COMUNICACIÓN CON LAS VENTANAS EMERGENTES
+   (algunos hostings, como GitHub Pages, envían la cabecera
+   Cross-Origin-Opener-Policy: same-origin, que aísla la ventana
+   emergente y deja window.opener en null. Este puente usa
+   localStorage —que sí se comparte entre pestañas del mismo
+   origen sin verse afectado por esa cabecera— como respaldo.)
+============================================================ */
+window.addEventListener('storage', function(e){
+  if(!e.newValue) return;
+  try{
+    if(e.key === '__lb_comando_terminal__'){
+      const datos = JSON.parse(e.newValue);
+      if(datos && datos.cmd && window.Terminal){
+        Terminal.probar(datos.cmd);
+      }
+    } else if(e.key === '__lb_puntaje_unidad__'){
+      const datos = JSON.parse(e.newValue);
+      if(datos && datos.unidad){
+        registrarPuntajeUnidad(datos.unidad, datos.pts, datos.total);
+      }
+    } else if(e.key === '__lb_dato_distribuciones__'){
+      juegoDistribuciones();
+    }
+  }catch(err){ /* ignorar mensajes mal formados */ }
+});
 
 /* Pinta el resumen ("teaser") de cada unidad en la página principal */
 function renderTeaser(n){
